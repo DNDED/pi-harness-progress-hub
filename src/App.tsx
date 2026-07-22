@@ -114,6 +114,7 @@ export default function App() {
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
+  const [sentinelSearchQuery, setSentinelSearchQuery] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [autoPolling, setAutoPolling] = useState<boolean>(true);
   const [showVideo, setShowVideo] = useState<boolean>(false);
@@ -168,6 +169,7 @@ export default function App() {
     setSubagentStatusFilter('All');
     setSubagentSearchQuery('');
     setSentinelCategoryFilter('All');
+    setSentinelSearchQuery('');
   };
 
   const handleRefresh = async () => {
@@ -338,7 +340,13 @@ export default function App() {
   });
 
   const sentinelCategories = ['All', ...Array.from(new Set(sentinels.map(s => s.category)))];
-  const filteredSentinels = sentinels.filter(s => sentinelCategoryFilter === 'All' || s.category === sentinelCategoryFilter);
+  const filteredSentinels = sentinels.filter(s => {
+    const matchesCategory = sentinelCategoryFilter === 'All' || s.category === sentinelCategoryFilter;
+    const matchesQuery = sentinelSearchQuery === '' ||
+      s.name.toLowerCase().includes(sentinelSearchQuery.toLowerCase()) ||
+      s.category.toLowerCase().includes(sentinelSearchQuery.toLowerCase());
+    return matchesCategory && matchesQuery;
+  });
 
   const maxSubagentDuration = Math.max(1, ...subagents.map(s => s.durationMs));
 
@@ -759,7 +767,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Sentinels Health Drawer with Category Filter Pills */}
+        {/* Sentinels Health Drawer with Inline Search & Category Filter Pills */}
         {showSentinels && (
           <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -767,20 +775,40 @@ export default function App() {
                 <Layers className="w-5 h-5 text-emerald-400" />
                 <h2 className="text-lg font-bold text-slate-100">Proactive Harness Sentinel Health Matrix</h2>
               </div>
-              <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 sm:pb-0">
-                {sentinelCategories.map((sc) => (
-                  <button
-                    key={sc}
-                    onClick={() => setSentinelCategoryFilter(sc)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition whitespace-nowrap ${
-                      sentinelCategoryFilter === sc
-                        ? 'bg-emerald-500 text-slate-950 font-bold'
-                        : 'bg-slate-800 text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    {sc}
-                  </button>
-                ))}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    type="text"
+                    placeholder="Search sentinels..."
+                    value={sentinelSearchQuery}
+                    onChange={(e) => setSentinelSearchQuery(e.target.value)}
+                    className="pl-8 pr-6 py-1 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition w-36 sm:w-48"
+                  />
+                  {sentinelSearchQuery && (
+                    <button
+                      onClick={() => setSentinelSearchQuery('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+                <div className="flex items-center gap-1 overflow-x-auto max-w-full">
+                  {sentinelCategories.map((sc) => (
+                    <button
+                      key={sc}
+                      onClick={() => setSentinelCategoryFilter(sc)}
+                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition whitespace-nowrap ${
+                        sentinelCategoryFilter === sc
+                          ? 'bg-emerald-500 text-slate-950 font-bold'
+                          : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      {sc}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
