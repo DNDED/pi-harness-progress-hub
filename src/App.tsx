@@ -1379,6 +1379,37 @@ export default function App() {
                 );
               })}
             </div>
+
+            {/* Subagent Model Compute Throughput Efficiency Comparison Table */}
+            {subagents.length > 0 && (
+              <div className="pt-4 border-t border-slate-800 space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between text-slate-300">
+                  <span className="font-bold flex items-center gap-1.5 text-cyan-300">
+                    <Zap className="w-4 h-4 text-cyan-400" /> Model Compute Throughput Efficiency
+                  </span>
+                  <span className="text-[10px] text-slate-500">TOKENS GENERATED / SEC</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {modelLeaderboard.map((m) => (
+                    <div key={m.model} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                      <div className="text-slate-200 font-bold truncate">{m.model}</div>
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-slate-500">Speed:</span>
+                        <span className="text-cyan-300 font-bold">{m.tokensPerSec} tok/s</span>
+                      </div>
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-slate-500">Density:</span>
+                        <span className="text-indigo-300 font-bold">{m.avgTokens} tok/task</span>
+                      </div>
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-slate-500">Latency:</span>
+                        <span className="text-emerald-300 font-bold">{m.avgDuration}ms avg</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
