@@ -42,6 +42,7 @@ import {
   Timer,
   Command,
   Star,
+  AlertTriangle,
   Edit,
   Trash2
 } from 'lucide-react';
@@ -1691,7 +1692,18 @@ export default function App() {
                   )}
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-900">
                     <span>{s.model}</span>
-                    <span>{s.durationMs}ms</span>
+                    <div className="flex items-center gap-1.5">
+                      {s.durationMs > 15000 ? (
+                        <span className="px-1.5 py-0.5 bg-amber-500/10 text-amber-300 border border-amber-500/20 rounded text-[9px] font-semibold flex items-center gap-0.5" title="Execution duration exceeded 15 seconds">
+                          <AlertTriangle className="w-2.5 h-2.5 text-amber-400" /> Slow (&gt;15s)
+                        </span>
+                      ) : s.durationMs < 3000 ? (
+                        <span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 rounded text-[9px] font-semibold flex items-center gap-0.5" title="Ultra-fast subagent execution under 3 seconds">
+                          <Zap className="w-2.5 h-2.5 text-emerald-400" /> Fast (&lt;3s)
+                        </span>
+                      ) : null}
+                      <span className="text-slate-200 font-bold">{s.durationMs}ms</span>
+                    </div>
                   </div>
                 </div>
               ))}
