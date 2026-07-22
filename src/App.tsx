@@ -1806,6 +1806,22 @@ export default function App() {
               </div>
             )}
 
+            {filteredSubagents.length > 0 && (
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1 pt-1">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span>
+                    <span>Execution Latency (ms)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block"></span>
+                    <span>Token Output Volume</span>
+                  </div>
+                </div>
+                <span className="text-[10px] text-slate-500">showing {filteredSubagents.length} subagents</span>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {filteredSubagents.map((s) => (
                 <div key={s.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition space-y-2 group">
