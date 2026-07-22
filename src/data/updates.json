@@ -1,0 +1,42 @@
+[
+  {
+    "id": "upd-001",
+    "timestamp": "2026-07-22T06:30:00Z",
+    "relativeTime": "Just now",
+    "title": "Harness Dependencies & ESM Runtime Normalization",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (subagent-01)",
+    "description": "Normalized typescript and package resolution in pi-agent-harness, created local junction for @earendil-works core modules, added setLspQueryMock to lsp.ts to prevent ESM read-only property mutation errors during tests.",
+    "highlights": [
+      "Fixed ESM read-only property error in power.test.ts",
+      "Created @earendil-works module junction for instant resolution",
+      "All 58 core unit tests and 40+ sentinel tests passing"
+    ],
+    "metrics": {
+      "testsPassing": "58/58",
+      "sentinelsVerified": "42",
+      "performance": "158ms run time"
+    }
+  },
+  {
+    "id": "upd-002",
+    "timestamp": "2026-07-22T06:40:00Z",
+    "relativeTime": "10m ago",
+    "title": "Continuous Progress Hub & Real-time Changelog Launch",
+    "category": "Progress Dashboard",
+    "status": "Active",
+    "author": "pi-agent",
+    "description": "Scaffolded and launched the Pi Agent Harness Progress Hub on localhost:3050. Provides continuous real-time visual tracking of every optimization, sentinel pass, UI tweak, and research finding.",
+    "highlights": [
+      "Vite + React + Tailwind CSS dark-mode dashboard",
+      "Real-time update feed with category filtering & metrics",
+      "Auto-updating updates.json data source for autonomous log sync"
+    ],
+    "metrics": {
+      "port": "3050",
+      "version": "v1.0.0",
+      "status": "Online"
+    }
+  }
+]
