@@ -86,6 +86,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>('');
+  const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
@@ -178,6 +179,8 @@ export default function App() {
       item.highlights.some(h => h.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesTag && matchesQuery;
   });
+
+  const filteredSubagents = subagents.filter(s => subagentStatusFilter === 'All' || s.status.toLowerCase() === subagentStatusFilter.toLowerCase());
 
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
 
@@ -446,7 +449,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Subagents Matrix Drawer */}
+        {/* Subagents Matrix Drawer with Status Filter */}
         {showSubagents && (
           <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
@@ -454,13 +457,25 @@ export default function App() {
                 <Bot className="w-5 h-5 text-cyan-400" />
                 <h2 className="text-lg font-bold text-slate-100">Live Subagent Execution Telemetry</h2>
               </div>
-              <span className="text-xs font-mono text-cyan-300 bg-cyan-500/10 px-2.5 py-1 rounded-md border border-cyan-500/20">
-                {subagents.length} Recorded Subagents
-              </span>
+              <div className="flex items-center gap-2">
+                {['All', 'Completed', 'Running'].map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => setSubagentStatusFilter(st)}
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition ${
+                      subagentStatusFilter === st
+                        ? 'bg-cyan-500 text-slate-950 font-bold'
+                        : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {subagents.map((s) => (
+              {filteredSubagents.map((s) => (
                 <div key={s.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                     <span className="text-cyan-400 font-bold">{s.name}</span>
