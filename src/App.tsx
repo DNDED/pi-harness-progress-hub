@@ -19,6 +19,7 @@ import {
   FileText,
   Bot,
   BarChart3,
+  PieChart,
   Layers,
   Tag,
   BookOpen,
@@ -1450,6 +1451,63 @@ export default function App() {
                     <span>Fast (&lt;1s)</span>
                     <span>Subagent Execution Latency (ms)</span>
                     <span>Slow ({maxSubagentDuration}ms)</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Subagent AI Model Workload Allocation Percentage Share */}
+            {subagents.length > 0 && (
+              <div className="pt-4 border-t border-slate-800 space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between text-slate-300">
+                  <span className="font-bold flex items-center gap-1.5 text-amber-300">
+                    <PieChart className="w-4 h-4 text-amber-400" /> AI Model Workload Allocation Share
+                  </span>
+                  <span className="text-[10px] text-slate-500">TASK DISTRIBUTION %</span>
+                </div>
+                <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3">
+                  <div className="w-full bg-slate-900 h-4 rounded-full overflow-hidden flex border border-slate-800">
+                    {modelLeaderboard.map((m, idx) => {
+                      const sharePercent = Math.round((m.tasks / subagents.length) * 100);
+                      const colors = [
+                        'bg-cyan-500',
+                        'bg-indigo-500',
+                        'bg-emerald-500',
+                        'bg-amber-500',
+                        'bg-rose-500'
+                      ];
+                      const colorClass = colors[idx % colors.length];
+
+                      return (
+                        <div
+                          key={m.model}
+                          className={`h-full ${colorClass} transition-all duration-500`}
+                          style={{ width: `${sharePercent}%` }}
+                          title={`${m.model}: ${m.tasks} tasks (${sharePercent}%)`}
+                        ></div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex flex-wrap gap-4 pt-1">
+                    {modelLeaderboard.map((m, idx) => {
+                      const sharePercent = Math.round((m.tasks / subagents.length) * 100);
+                      const dotColors = [
+                        'bg-cyan-400',
+                        'bg-indigo-400',
+                        'bg-emerald-400',
+                        'bg-amber-400',
+                        'bg-rose-400'
+                      ];
+                      const dotColor = dotColors[idx % dotColors.length];
+
+                      return (
+                        <div key={m.model} className="flex items-center gap-2 text-[11px]">
+                          <span className={`w-2.5 h-2.5 rounded-full ${dotColor}`}></span>
+                          <span className="text-slate-300 font-semibold">{m.model}:</span>
+                          <span className="text-slate-400 font-bold">{sharePercent}% ({m.tasks} tasks)</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
