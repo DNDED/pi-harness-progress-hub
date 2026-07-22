@@ -721,7 +721,12 @@ export default function App() {
   }, {} as Record<string, { model: string; tasks: number; duration: number; tokens: number }>);
 
   const modelLeaderboard = Object.values(subagentModelStats)
-    .map(m => ({ ...m, avgDuration: Math.round(m.duration / m.tasks) }))
+    .map(m => ({
+      ...m,
+      avgDuration: Math.round(m.duration / m.tasks),
+      avgTokens: Math.round(m.tokens / m.tasks),
+      tokensPerSec: m.duration > 0 ? Math.round((m.tokens / (m.duration / 1000)) * 10) / 10 : 0
+    }))
     .sort((a, b) => b.tasks - a.tasks);
 
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
@@ -1465,8 +1470,9 @@ export default function App() {
                         <span>Tasks: <strong className="text-slate-200">{m.tasks}</strong></span>
                         <span>Avg: <strong className="text-emerald-400">{m.avgDuration}ms</strong></span>
                       </div>
-                      <div className="text-[10px] text-slate-500">
-                        Total Tokens: <span className="text-indigo-300 font-semibold">{m.tokens}</span>
+                      <div className="flex justify-between items-center text-[10px] text-slate-500 pt-0.5">
+                        <span>Tokens: <strong className="text-indigo-300">{m.tokens}</strong></span>
+                        <span className="px-1.5 py-0.5 bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 rounded font-semibold text-[9px]">{m.tokensPerSec} tok/s</span>
                       </div>
                     </div>
                   ))}
