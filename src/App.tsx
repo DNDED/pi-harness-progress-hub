@@ -20,7 +20,8 @@ import {
   Bot,
   Gauge,
   BarChart3,
-  Layers
+  Layers,
+  Tag
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -65,6 +66,7 @@ export default function App() {
   const [sentinels, setSentinels] = useState<SentinelItem[]>((initialSentinels as unknown) as SentinelItem[]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedTag, setSelectedTag] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
@@ -144,11 +146,12 @@ export default function App() {
 
   const filteredUpdates = updates.filter((item) => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+    const matchesTag = selectedTag === '' || item.highlights.some(h => h.toLowerCase().includes(selectedTag.toLowerCase()));
     const matchesQuery = searchQuery === '' ||
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.highlights.some(h => h.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesQuery;
+    return matchesCategory && matchesTag && matchesQuery;
   });
 
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
@@ -240,6 +243,22 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Active Tag Filter Indicator */}
+        {selectedTag && (
+          <div className="flex items-center justify-between p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl text-xs font-mono text-cyan-300">
+            <div className="flex items-center gap-2">
+              <Tag className="w-4 h-4 text-cyan-400" />
+              <span>Filtering by Highlight Tag: <strong>"{selectedTag}"</strong></span>
+            </div>
+            <button
+              onClick={() => setSelectedTag('')}
+              className="px-2 py-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-200 rounded font-bold transition"
+            >
+              Clear Tag
+            </button>
+          </div>
+        )}
+
         {/* Sentinels Health Drawer */}
         {showSentinels && (
           <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
@@ -386,7 +405,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">66 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">68 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
@@ -492,7 +511,13 @@ export default function App() {
                       {item.highlights.map((h, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <span className="text-cyan-400 font-bold mt-0.5">›</span>
-                          <span>{h}</span>
+                          <button
+                            onClick={() => setSelectedTag(h)}
+                            className="hover:text-cyan-300 hover:underline text-left transition"
+                            title="Click to filter by this tag"
+                          >
+                            {h}
+                          </button>
                         </li>
                       ))}
                     </ul>
