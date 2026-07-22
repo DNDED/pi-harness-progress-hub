@@ -90,6 +90,7 @@ export default function App() {
   const [showHealth, setShowHealth] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
+  const searchSuggestions = ['Sentinel', 'Subagent', 'Remotion', 'Health', 'Vault', 'Exporter'];
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -453,7 +454,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">70 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">72 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
@@ -478,32 +479,48 @@ export default function App() {
         </div>
 
         {/* Filters & Search */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
-                  selectedCategory === cat
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
-                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+        <div className="flex flex-col space-y-3 pb-4 border-b border-slate-800">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
+                    selectedCategory === cat
+                      ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
+                      : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Search updates..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+              />
+            </div>
           </div>
 
-          <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input
-              type="text"
-              placeholder="Search updates..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
-            />
+          {/* Quick Search Suggestions */}
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-500 pt-1">
+            <span>Quick Suggestions:</span>
+            {searchSuggestions.map((s) => (
+              <button
+                key={s}
+                onClick={() => setSearchQuery(s)}
+                className="px-2 py-0.5 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 rounded transition"
+              >
+                {s}
+              </button>
+            ))}
           </div>
         </div>
 
