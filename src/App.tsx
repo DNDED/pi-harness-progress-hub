@@ -142,7 +142,7 @@ export default function App() {
   const [subagentModelFilter, setSubagentModelFilter] = useState<string>('All');
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
-  const [subagentChartMetric, setSubagentChartMetric] = useState<'duration' | 'tokens'>('duration');
+  const [subagentChartMetric, setSubagentChartMetric] = useState<'duration' | 'tokens' | 'models'>('duration');
   const [isRunningBenchmark, setIsRunningBenchmark] = useState<boolean>(false);
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [sentinelSearchQuery, setSentinelSearchQuery] = useState<string>('');
@@ -1468,7 +1468,11 @@ export default function App() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono text-slate-400">
                   <span className="flex items-center gap-1.5 font-bold text-slate-200">
                     <Timer className="w-3.5 h-3.5 text-cyan-400" />
-                    {subagentChartMetric === 'duration' ? 'Execution Duration Distribution (ms)' : 'Token Usage Distribution (tokens)'}
+                    {subagentChartMetric === 'duration'
+                      ? 'Execution Duration Distribution (ms)'
+                      : subagentChartMetric === 'tokens'
+                      ? 'Token Usage Distribution (tokens)'
+                      : 'Subagent Workload by Model (tasks)'}
                   </span>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-[10px]">
@@ -1492,41 +1496,79 @@ export default function App() {
                       >
                         Tokens
                       </button>
+                      <button
+                        onClick={() => setSubagentChartMetric('models')}
+                        className={`px-2 py-0.5 rounded font-semibold transition ${
+                          subagentChartMetric === 'models'
+                            ? 'bg-amber-500 text-slate-950 font-bold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        Models
+                      </button>
                     </div>
                     <span className="text-cyan-300">
-                      Max: {subagentChartMetric === 'duration' ? `${maxSubagentDuration}ms` : `${Math.max(...subagents.map(s => s.tokensUsed || 0))} tokens`}
+                      Max: {subagentChartMetric === 'duration'
+                        ? `${maxSubagentDuration}ms`
+                        : subagentChartMetric === 'tokens'
+                        ? `${Math.max(...subagents.map(s => s.tokensUsed || 0), 1)} tokens`
+                        : `${Math.max(...modelLeaderboard.map(m => m.tasks), 1)} tasks`}
                     </span>
                   </div>
                 </div>
                 <div className="space-y-2 pt-2 border-t border-slate-900">
-                  {subagents.slice(0, 5).map((s) => {
-                    const maxVal = subagentChartMetric === 'duration'
-                      ? maxSubagentDuration
-                      : Math.max(...subagents.map(item => item.tokensUsed || 0), 1);
-                    const currentVal = subagentChartMetric === 'duration' ? s.durationMs : (s.tokensUsed || 0);
-                    const widthPercent = Math.min(100, Math.max(10, (currentVal / maxVal) * 100));
+                  {subagentChartMetric === 'models' ? (
+                    modelLeaderboard.map((m) => {
+                      const maxTasks = Math.max(...modelLeaderboard.map(item => item.tasks), 1);
+                      const widthPercent = Math.min(100, Math.max(10, (m.tasks / maxTasks) * 100));
 
-                    return (
-                      <div key={s.id} className="space-y-1 font-mono text-xs">
-                        <div className="flex justify-between text-slate-400 text-[11px]">
-                          <span>{s.name} ({s.model})</span>
-                          <span className={subagentChartMetric === 'duration' ? 'text-cyan-300 font-bold' : 'text-indigo-300 font-bold'}>
-                            {subagentChartMetric === 'duration' ? `${s.durationMs}ms` : `${s.tokensUsed || 0} tokens`}
-                          </span>
+                      return (
+                        <div key={m.model} className="space-y-1 font-mono text-xs">
+                          <div className="flex justify-between text-slate-400 text-[11px]">
+                            <span>{m.model}</span>
+                            <span className="text-amber-300 font-bold">
+                              {m.tasks} tasks ({m.avgDuration}ms avg)
+                            </span>
+                          </div>
+                          <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                            <div
+                              className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-amber-500 to-orange-400"
+                              style={{ width: `${widthPercent}%` }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                          <div
-                            className={`h-full rounded-full transition-all duration-300 ${
-                              subagentChartMetric === 'duration'
-                                ? 'bg-gradient-to-r from-cyan-500 to-emerald-400'
-                                : 'bg-gradient-to-r from-indigo-500 to-purple-400'
-                            }`}
-                            style={{ width: `${widthPercent}%` }}
-                          ></div>
+                      );
+                    })
+                  ) : (
+                    subagents.slice(0, 5).map((s) => {
+                      const maxVal = subagentChartMetric === 'duration'
+                        ? maxSubagentDuration
+                        : Math.max(...subagents.map(item => item.tokensUsed || 0), 1);
+                      const currentVal = subagentChartMetric === 'duration' ? s.durationMs : (s.tokensUsed || 0);
+                      const widthPercent = Math.min(100, Math.max(10, (currentVal / maxVal) * 100));
+
+                      return (
+                        <div key={s.id} className="space-y-1 font-mono text-xs">
+                          <div className="flex justify-between text-slate-400 text-[11px]">
+                            <span>{s.name} ({s.model})</span>
+                            <span className={subagentChartMetric === 'duration' ? 'text-cyan-300 font-bold' : 'text-indigo-300 font-bold'}>
+                              {subagentChartMetric === 'duration' ? `${s.durationMs}ms` : `${s.tokensUsed || 0} tokens`}
+                            </span>
+                          </div>
+                          <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                            <div
+                              className={`h-full rounded-full transition-all duration-300 ${
+                                subagentChartMetric === 'duration'
+                                  ? 'bg-gradient-to-r from-cyan-500 to-emerald-400'
+                                  : 'bg-gradient-to-r from-indigo-500 to-purple-400'
+                              }`}
+                              style={{ width: `${widthPercent}%` }}
+                            ></div>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
                 </div>
               </div>
             )}
