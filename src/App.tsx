@@ -172,6 +172,7 @@ export default function App() {
   const [selectedSentinelLog, setSelectedSentinelLog] = useState<SentinelLogData | null>(null);
   const [sentinelLogFilter, setSentinelLogFilter] = useState<string>('');
   const [copiedLog, setCopiedLog] = useState<boolean>(false);
+  const [copiedTaskId, setCopiedTaskId] = useState<string | null>(null);
   const [isReverifyingSentinels, setIsReverifyingSentinels] = useState<boolean>(false);
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
@@ -1607,6 +1608,18 @@ export default function App() {
                         {s.status === 'Running' && <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>}
                         {s.status}
                       </span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(s.task);
+                          setCopiedTaskId(s.id);
+                          setTimeout(() => setCopiedTaskId(null), 2000);
+                        }}
+                        className="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                        title="Copy task prompt to clipboard"
+                      >
+                        {copiedTaskId === s.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-slate-400" />}
+                        <span>{copiedTaskId === s.id ? 'Copied' : 'Task'}</span>
+                      </button>
                       <button
                         onClick={async () => {
                           try {
