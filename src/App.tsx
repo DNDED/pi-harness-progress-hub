@@ -38,7 +38,8 @@ import {
   FileSpreadsheet,
   TrendingUp,
   List,
-  LayoutGrid
+  LayoutGrid,
+  Timer
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -329,6 +330,8 @@ export default function App() {
 
   const sentinelCategories = ['All', ...Array.from(new Set(sentinels.map(s => s.category)))];
   const filteredSentinels = sentinels.filter(s => sentinelCategoryFilter === 'All' || s.category === sentinelCategoryFilter);
+
+  const maxSubagentDuration = Math.max(1, ...subagents.map(s => s.durationMs));
 
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
 
@@ -826,7 +829,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Subagents Matrix Drawer with Dispatch Button */}
+        {/* Subagents Matrix Drawer with Dispatch Button & Duration Chart */}
         {showSubagents && (
           <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -857,6 +860,37 @@ export default function App() {
                 ))}
               </div>
             </div>
+
+            {/* Execution Duration Visualizer */}
+            {subagents.length > 0 && (
+              <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span className="flex items-center gap-1.5 font-bold text-slate-200">
+                    <Timer className="w-3.5 h-3.5 text-cyan-400" /> Execution Duration Distribution (ms)
+                  </span>
+                  <span className="text-cyan-300">Max: {maxSubagentDuration}ms</span>
+                </div>
+                <div className="space-y-2 pt-2 border-t border-slate-900">
+                  {subagents.slice(0, 5).map((s) => {
+                    const widthPercent = Math.min(100, Math.max(10, (s.durationMs / maxSubagentDuration) * 100));
+                    return (
+                      <div key={s.id} className="space-y-1 font-mono text-xs">
+                        <div className="flex justify-between text-slate-400 text-[11px]">
+                          <span>{s.name} ({s.model})</span>
+                          <span className="text-cyan-300 font-bold">{s.durationMs}ms</span>
+                        </div>
+                        <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                          <div
+                            className="bg-gradient-to-r from-cyan-500 to-emerald-400 h-full rounded-full transition-all duration-300"
+                            style={{ width: `${widthPercent}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {filteredSubagents.map((s) => (

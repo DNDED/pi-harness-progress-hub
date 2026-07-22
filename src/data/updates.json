@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrjwlt",
+    "timestamp": "2026-07-22T07:31:02.993Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Execution Duration Distribution Chart UI",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added visual execution duration bar chart in Live Subagent Telemetry Drawer.",
+    "highlights": [
+      "Subagent Duration Chart",
+      "Subagent execution duration bar breakdown",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrjwlt",
+    "timestamp": "2026-07-22T07:31:02.993Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Execution Duration Distribution Chart UI",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added visual execution duration bar chart in Live Subagent Telemetry Drawer.",
+    "highlights": [
+      "Subagent Duration Chart",
+      "Subagent execution duration bar breakdown",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvri7uv",
     "timestamp": "2026-07-22T07:29:44.263Z",
     "relativeTime": "Just now",
