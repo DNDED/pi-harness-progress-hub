@@ -21,7 +21,8 @@ import {
   BarChart3,
   Layers,
   Tag,
-  BookOpen
+  BookOpen,
+  HeartPulse
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -60,10 +61,24 @@ interface SentinelItem {
   speedMs: number;
 }
 
+interface HealthData {
+  status: string;
+  uptimeSec: number;
+  systemMemory: string;
+  activeSentinels: number;
+  passRate: string;
+  totalUpdates: number;
+  totalSubagents: number;
+  nodeVersion: string;
+  platform: string;
+  timestamp: string;
+}
+
 export default function App() {
   const [updates, setUpdates] = useState<UpdateItem[]>((initialUpdates as unknown) as UpdateItem[]);
   const [subagents, setSubagents] = useState<SubagentItem[]>((initialSubagents as unknown) as SubagentItem[]);
   const [sentinels, setSentinels] = useState<SentinelItem[]>((initialSentinels as unknown) as SentinelItem[]);
+  const [health, setHealth] = useState<HealthData | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>('');
@@ -72,29 +87,23 @@ export default function App() {
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
   const [showAnalytics, setShowAnalytics] = useState<boolean>(false);
   const [showSentinels, setShowSentinels] = useState<boolean>(false);
+  const [showHealth, setShowHealth] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      const [resUpdates, resSubagents, resSentinels] = await Promise.all([
+      const [resUpdates, resSubagents, resSentinels, resHealth] = await Promise.all([
         fetch('/api/updates?t=' + Date.now()),
         fetch('/api/subagents?t=' + Date.now()),
-        fetch('/api/sentinels?t=' + Date.now())
+        fetch('/api/sentinels?t=' + Date.now()),
+        fetch('/api/health?t=' + Date.now())
       ]);
-      if (resUpdates.ok) {
-        const data = await resUpdates.json();
-        setUpdates(data);
-      }
-      if (resSubagents.ok) {
-        const subData = await resSubagents.json();
-        setSubagents(subData);
-      }
-      if (resSentinels.ok) {
-        const senData = await resSentinels.json();
-        setSentinels(senData);
-      }
+      if (resUpdates.ok) setUpdates(await resUpdates.json());
+      if (resSubagents.ok) setSubagents(await resSubagents.json());
+      if (resSentinels.ok) setSentinels(await resSentinels.json());
+      if (resHealth.ok) setHealth(await resHealth.json());
     } catch {
       // fallback
     } finally {
@@ -103,6 +112,7 @@ export default function App() {
   };
 
   useEffect(() => {
+    handleRefresh();
     const interval = setInterval(handleRefresh, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -170,10 +180,14 @@ export default function App() {
                 <h1 className="font-bold text-lg tracking-tight bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
                   Pi Agent Harness Progress Hub
                 </h1>
-                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full flex items-center gap-1">
+                <button
+                  onClick={() => setShowHealth(!showHealth)}
+                  className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-full flex items-center gap-1 transition"
+                  title="Click to view live system health"
+                >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                  Loop Active
-                </span>
+                  Health
+                </button>
               </div>
               <p className="text-xs text-slate-400 font-mono">
                 Continuous Autonomous Self-Improvement Log • http://localhost:3050
@@ -243,6 +257,40 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Live System Health Drawer */}
+        {showHealth && health && (
+          <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <HeartPulse className="w-5 h-5 text-emerald-400 animate-pulse" />
+                <h2 className="text-lg font-bold text-slate-100">Live Harness Server Health Diagnostics</h2>
+              </div>
+              <span className="text-xs font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
+                STATUS: {health.status}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500">Uptime</div>
+                <div className="text-cyan-300 font-bold text-sm mt-1">{health.uptimeSec}s</div>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500">System Memory</div>
+                <div className="text-emerald-300 font-bold text-sm mt-1">{health.systemMemory}</div>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500">Node / Platform</div>
+                <div className="text-indigo-300 font-bold text-sm mt-1">{health.nodeVersion} ({health.platform})</div>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500">Pass Rate</div>
+                <div className="text-amber-300 font-bold text-sm mt-1">{health.passRate} (42 Sentinels)</div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Active Tag Filter Indicator */}
         {selectedTag && (
           <div className="flex items-center justify-between p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl text-xs font-mono text-cyan-300">
