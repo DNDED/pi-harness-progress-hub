@@ -1944,7 +1944,14 @@ export default function App() {
                       </button>
                     </div>
                   </div>
-                  <div className="text-xs text-slate-300">{s.task}</div>
+                  <div className="space-y-1">
+                    <div className="text-xs text-slate-300">{s.task}</div>
+                    <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
+                      <span>{s.task.trim().split(/\s+/).length} words</span>
+                      <span>•</span>
+                      <span>{s.task.length} chars</span>
+                    </div>
+                  </div>
                   {s.status === 'Running' ? (
                     <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-amber-500/30">
                       <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 h-full rounded-full animate-pulse w-full"></div>
