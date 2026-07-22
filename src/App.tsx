@@ -33,7 +33,8 @@ import {
   FileJson,
   Palette,
   X,
-  Plus
+  Plus,
+  Radio
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -96,6 +97,7 @@ export default function App() {
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [autoPolling, setAutoPolling] = useState<boolean>(true);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
   const [showAnalytics, setShowAnalytics] = useState<boolean>(false);
@@ -213,9 +215,10 @@ export default function App() {
 
   useEffect(() => {
     handleRefresh();
-    const interval = setInterval(handleRefresh, 5000);
+    if (!autoPolling) return;
+    const interval = setInterval(handleRefresh, 3000);
     return () => clearInterval(interval);
-  }, [audioEnabled]);
+  }, [audioEnabled, autoPolling]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -238,6 +241,8 @@ export default function App() {
         setAudioEnabled(prev => !prev);
       } else if (e.key.toLowerCase() === 't') {
         setActiveTheme(prev => prev === 'slate' ? 'cyber' : prev === 'cyber' ? 'obsidian' : 'slate');
+      } else if (e.key.toLowerCase() === 'p') {
+        setAutoPolling(prev => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -364,6 +369,18 @@ export default function App() {
                   <FileJson className="w-3 h-3 text-cyan-400" />
                   JSON API
                 </a>
+                <button
+                  onClick={() => setAutoPolling(!autoPolling)}
+                  className={`px-2 py-0.5 text-xs font-semibold rounded-full border flex items-center gap-1 transition ${
+                    autoPolling
+                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                      : 'bg-slate-800 text-slate-400 border-slate-700'
+                  }`}
+                  title="Toggle 3s Live Polling (P)"
+                >
+                  <Radio className={`w-3 h-3 ${autoPolling ? 'animate-pulse text-emerald-400' : ''}`} />
+                  <span>{autoPolling ? 'Live 3s' : 'Polling Paused'}</span>
+                </button>
                 <button
                   onClick={() => setActiveTheme(prev => prev === 'slate' ? 'cyber' : prev === 'cyber' ? 'obsidian' : 'slate')}
                   className="p-1 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/20 rounded-md text-xs transition"
@@ -564,6 +581,10 @@ export default function App() {
               <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
                 <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">T</span>
                 <span className="text-slate-300">Cycle Visual Theme</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">P</span>
+                <span className="text-slate-300">Toggle 3s Polling</span>
               </div>
             </div>
           </div>
