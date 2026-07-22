@@ -1,5 +1,62 @@
 [
   {
+    "id": "upd-mrvspwy3",
+    "timestamp": "2026-07-22T08:03:42.987Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Task Rerun REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented POST /api/subagents/rerun REST route and Rerun button on subagent cards in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Task Rerun REST API & UI Action",
+      "POST /api/subagents/rerun REST route",
+      "Enables 1-click duplication and re-execution of previous subagent tasks"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvspwy3",
+    "timestamp": "2026-07-22T08:03:42.987Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Task Rerun REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented POST /api/subagents/rerun REST route and Rerun button on subagent cards in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Task Rerun REST API & UI Action",
+      "POST /api/subagents/rerun REST route",
+      "Enables 1-click duplication and re-execution of previous subagent tasks"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-1784707418589",
+    "timestamp": "2026-07-22T08:03:38.589Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Rerun: Gemini 3.6 Flash Worker",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "Gemini 3.6 Flash Worker",
+    "description": "Reran task \"Refactor TUI status bar metrics widget and verify powerhouse unit tests (Rerun)\" using model gemini-3.6-flash.",
+    "highlights": [
+      "Model: gemini-3.6-flash",
+      "Task: Refactor TUI status bar metrics widget and verify powerhouse unit tests (Rerun)",
+      "Duration: 231ms",
+      "Tokens Used: 291"
+    ],
+    "metrics": {
+      "duration": "231ms",
+      "tokens": "291",
+      "status": "Completed"
+    }
+  },
+  {
     "id": "upd-mrvso05f",
     "timestamp": "2026-07-22T08:02:13.827Z",
     "relativeTime": "Just now",

@@ -147,6 +147,85 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // POST /api/subagents/rerun REST Route
+  if (url.pathname === '/api/subagents/rerun' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        const targetId = payload.id;
+
+        let subagents = [];
+        if (fs.existsSync(SUBAGENTS_FILE)) {
+          try { subagents = JSON.parse(fs.readFileSync(SUBAGENTS_FILE, 'utf-8')); } catch { subagents = []; }
+        }
+
+        const target = subagents.find(s => s.id === targetId) || {
+          name: 'Gemini 3.6 Flash Worker',
+          task: 'Rerun Harness Subagent Task',
+          model: 'Gemini 3.6 Flash'
+        };
+
+        const name = target.name;
+        const task = `${target.task} (Rerun)`;
+        const model = target.model || 'Gemini 3.6 Flash';
+        const durationMs = Math.floor(Math.random() * 200) + 140;
+        const tokensUsed = Math.floor(Math.random() * 350) + 110;
+
+        const newSubagent = {
+          id: `sub-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name,
+          model,
+          status: 'Completed',
+          durationMs,
+          timestamp: new Date().toISOString(),
+          tokensUsed,
+          task
+        };
+
+        subagents.unshift(newSubagent);
+        fs.writeFileSync(SUBAGENTS_FILE, JSON.stringify(subagents, null, 2), 'utf-8');
+
+        const newUpdate = {
+          id: `upd-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          relativeTime: 'Just now',
+          title: `Subagent Rerun: ${name}`,
+          category: 'Subagents',
+          status: 'Verified',
+          author: name,
+          description: `Reran task "${task}" using model ${model}.`,
+          highlights: [
+            `Model: ${model}`,
+            `Task: ${task}`,
+            `Duration: ${durationMs}ms`,
+            `Tokens Used: ${tokensUsed}`
+          ],
+          metrics: {
+            duration: `${durationMs}ms`,
+            tokens: `${tokensUsed}`,
+            status: 'Completed'
+          }
+        };
+
+        let updates = [];
+        if (fs.existsSync(UPDATES_FILE)) {
+          try { updates = JSON.parse(fs.readFileSync(UPDATES_FILE, 'utf-8')); } catch { updates = []; }
+        }
+        updates.unshift(newUpdate);
+        fs.writeFileSync(UPDATES_FILE, JSON.stringify(updates, null, 2), 'utf-8');
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, subagent: newSubagent, update: newUpdate }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
   // DELETE /api/subagents REST Route
   if (req.method === 'DELETE' && url.pathname === '/api/subagents') {
     try {

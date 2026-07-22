@@ -335,6 +335,24 @@ export default function App() {
     }
   };
 
+  const handleRerunSubagent = async (id: string) => {
+    try {
+      const res = await fetch('/api/subagents/rerun', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSubagents(prev => [data.subagent, ...prev]);
+        setUpdates(prev => [data.update, ...prev]);
+        playChime();
+      }
+    } catch {
+      // Fallback
+    }
+  };
+
   useEffect(() => {
     handleRefresh();
     if (!autoPolling) return;
@@ -1340,6 +1358,14 @@ export default function App() {
                       >
                         <Terminal className="w-3 h-3 text-cyan-400" />
                         Log
+                      </button>
+                      <button
+                        onClick={() => handleRerunSubagent(s.id)}
+                        className="px-1.5 py-0.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                        title="Duplicate and rerun this subagent task"
+                      >
+                        <RefreshCw className="w-3 h-3 text-indigo-400" />
+                        Rerun
                       </button>
                     </div>
                   </div>
