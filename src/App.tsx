@@ -1003,64 +1003,70 @@ export default function App() {
 
         {/* Hotkey Guide Modal */}
         {showHotkeyModal && (
-          <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Keyboard className="w-5 h-5 text-cyan-400" />
-                <h2 className="text-lg font-bold text-slate-100">Keyboard Hotkeys Navigation</h2>
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowHotkeyModal(false)}>
+            <div className="p-6 bg-slate-900 border border-cyan-500/40 rounded-3xl shadow-2xl space-y-4 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <Keyboard className="w-5 h-5 text-cyan-400" />
+                  <h2 className="text-lg font-bold text-slate-100">Keyboard Hotkeys Navigation</h2>
+                </div>
+                <button
+                  onClick={() => setShowHotkeyModal(false)}
+                  className="text-xs text-slate-400 hover:text-slate-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <button
-                onClick={() => setShowHotkeyModal(false)}
-                className="text-xs text-slate-400 hover:text-slate-200"
-              >
-                Close
-              </button>
-            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">?</span>
-                <span className="text-slate-300">Toggle Hotkeys</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">R</span>
-                <span className="text-slate-300">Refresh Feed</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">H</span>
-                <span className="text-slate-300">Toggle Health</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">S</span>
-                <span className="text-slate-300">Toggle Sentinels</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">B</span>
-                <span className="text-slate-300">Toggle Subagents</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">V</span>
-                <span className="text-slate-300">Toggle Video</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">A</span>
-                <span className="text-slate-300">Toggle Analytics</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">M</span>
-                <span className="text-slate-300">Toggle Audio Mute</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">T</span>
-                <span className="text-slate-300">Cycle Visual Theme</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">P</span>
-                <span className="text-slate-300">Toggle 3s Polling</span>
-              </div>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">C</span>
-                <span className="text-slate-300">Toggle Compact View</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Hotkeys</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">?</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Command Palette</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">Ctrl+K</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Refresh Feed</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">R</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Health</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">H</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Sentinels</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">S</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Subagents</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">B</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Video</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">V</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Analytics</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">A</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Audio Mute</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">M</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Cycle Visual Theme</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">T</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle 3s Polling</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">P</span>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-slate-300">Toggle Compact View</span>
+                  <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">C</span>
+                </div>
               </div>
             </div>
           </div>
