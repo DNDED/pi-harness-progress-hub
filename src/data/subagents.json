@@ -1,5 +1,75 @@
 [
   {
+    "id": "sub-1784705963567-811",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:39:23.567Z",
+    "tokensUsed": 219,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784705897091-533",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:38:17.091Z",
+    "tokensUsed": 473,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784705848833-895",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:37:28.833Z",
+    "tokensUsed": 551,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784705830054-521",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:37:10.054Z",
+    "tokensUsed": 146,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784705815840-427",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:36:55.840Z",
+    "tokensUsed": 134,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784705791611-798",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:36:31.611Z",
+    "tokensUsed": 354,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784705742654-436",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:35:42.654Z",
+    "tokensUsed": 471,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
     "id": "sub-1784704869241-684",
     "name": "TestWorkerAgent",
     "model": "Gemini 3.6 Flash",

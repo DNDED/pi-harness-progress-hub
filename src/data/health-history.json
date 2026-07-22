@@ -1,5 +1,68 @@
 [
   {
+    "timestamp": "2026-07-22T07:39:23.773Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:38:17.308Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:37:28.982Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:37:10.191Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:36:56.002Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:36:31.824Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:35:42.847Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
     "timestamp": "2026-07-22T07:25:10.535Z",
     "uptimeSec": 120,
     "memoryMb": 64,
