@@ -1,5 +1,293 @@
 [
   {
+    "id": "upd-mrvr2yx6",
+    "timestamp": "2026-07-22T07:17:52.842Z",
+    "relativeTime": "Just now",
+    "title": "Cross-Runtime Bun & Node JSON Parsing Sentinel Fix",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Refactored json-sentinel.ts with multi-runtime line number parsing regex for Bun and Node.",
+    "highlights": [
+      "json-sentinel.ts multi-runtime error regex",
+      "100% test pass rate across 124 tests and 42 sentinels",
+      "0 test failures"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr2yx6",
+    "timestamp": "2026-07-22T07:17:52.842Z",
+    "relativeTime": "Just now",
+    "title": "Cross-Runtime Bun & Node JSON Parsing Sentinel Fix",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Refactored json-sentinel.ts with multi-runtime line number parsing regex for Bun and Node.",
+    "highlights": [
+      "json-sentinel.ts multi-runtime error regex",
+      "100% test pass rate across 124 tests and 42 sentinels",
+      "0 test failures"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr2vq7",
+    "timestamp": "2026-07-22T07:17:48.703Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 29ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.03s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.03s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvr2vq7",
+    "timestamp": "2026-07-22T07:17:48.703Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 29ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.03s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.03s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvr2vpe",
+    "timestamp": "2026-07-22T07:17:48.674Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: Research-Agent-01",
+    "category": "Subagents",
+    "status": "Active",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Dispatched subagent 'Research-Agent-01' with model Vertex Gemini 3.6 Flash. Task: Inspect harness performance...",
+    "highlights": [
+      "Model: Vertex Gemini 3.6 Flash",
+      "Task ID: test-sub-1",
+      "Status: Running"
+    ],
+    "metrics": {
+      "subagent": "Research-Agent-01",
+      "model": "Vertex Gemini 3.6 Flash",
+      "status": "Running"
+    }
+  },
+  {
+    "id": "upd-mrvr2vmm",
+    "timestamp": "2026-07-22T07:17:48.574Z",
+    "relativeTime": "Just now",
+    "title": "CLI Logger Test Title",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying CLI logger functionality.",
+    "highlights": [
+      "Highlight 1",
+      "Highlight 2"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr2vmm",
+    "timestamp": "2026-07-22T07:17:48.574Z",
+    "relativeTime": "Just now",
+    "title": "CLI Logger Test Title",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying CLI logger functionality.",
+    "highlights": [
+      "Highlight 1",
+      "Highlight 2"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr2txa",
+    "timestamp": "2026-07-22T07:17:46.366Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvr2txa",
+    "timestamp": "2026-07-22T07:17:46.366Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvr28m0",
+    "timestamp": "2026-07-22T07:17:18.744Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 28ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.03s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.03s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvr28m0",
+    "timestamp": "2026-07-22T07:17:18.744Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 28ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.03s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.03s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvr28l8",
+    "timestamp": "2026-07-22T07:17:18.716Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: Research-Agent-01",
+    "category": "Subagents",
+    "status": "Active",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Dispatched subagent 'Research-Agent-01' with model Vertex Gemini 3.6 Flash. Task: Inspect harness performance...",
+    "highlights": [
+      "Model: Vertex Gemini 3.6 Flash",
+      "Task ID: test-sub-1",
+      "Status: Running"
+    ],
+    "metrics": {
+      "subagent": "Research-Agent-01",
+      "model": "Vertex Gemini 3.6 Flash",
+      "status": "Running"
+    }
+  },
+  {
+    "id": "upd-mrvr28e7",
+    "timestamp": "2026-07-22T07:17:18.463Z",
+    "relativeTime": "Just now",
+    "title": "CLI Logger Test Title",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying CLI logger functionality.",
+    "highlights": [
+      "Highlight 1",
+      "Highlight 2"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr28e7",
+    "timestamp": "2026-07-22T07:17:18.463Z",
+    "relativeTime": "Just now",
+    "title": "CLI Logger Test Title",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying CLI logger functionality.",
+    "highlights": [
+      "Highlight 1",
+      "Highlight 2"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr251i",
+    "timestamp": "2026-07-22T07:17:14.118Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvr251i",
+    "timestamp": "2026-07-22T07:17:14.118Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
     "id": "upd-mrvr1e2v",
     "timestamp": "2026-07-22T07:16:39.175Z",
     "relativeTime": "Just now",
