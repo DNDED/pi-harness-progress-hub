@@ -22,7 +22,10 @@ import {
   Layers,
   Tag,
   BookOpen,
-  HeartPulse
+  HeartPulse,
+  Award,
+  Copy,
+  Check
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -88,6 +91,8 @@ export default function App() {
   const [showAnalytics, setShowAnalytics] = useState<boolean>(false);
   const [showSentinels, setShowSentinels] = useState<boolean>(false);
   const [showHealth, setShowHealth] = useState<boolean>(false);
+  const [showBadgeModal, setShowBadgeModal] = useState<boolean>(false);
+  const [copiedBadge, setCopiedBadge] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
   const searchSuggestions = ['Sentinel', 'Subagent', 'Remotion', 'Health', 'Vault', 'Exporter'];
@@ -148,6 +153,14 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  const badgeMarkdown = `![pi-harness health](http://localhost:3050/api/status/badge)`;
+
+  const copyBadgeSnippet = () => {
+    navigator.clipboard.writeText(badgeMarkdown);
+    setCopiedBadge(true);
+    setTimeout(() => setCopiedBadge(false), 2000);
+  };
+
   const categoryCounts = categories.slice(1).reduce((acc, cat) => {
     acc[cat] = updates.filter(u => u.category === cat).length;
     return acc;
@@ -188,6 +201,14 @@ export default function App() {
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                   Health
+                </button>
+                <button
+                  onClick={() => setShowBadgeModal(!showBadgeModal)}
+                  className="px-2 py-0.5 text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/20 rounded-full flex items-center gap-1 transition"
+                  title="View and copy Status Badge"
+                >
+                  <Award className="w-3 h-3 text-amber-400" />
+                  Badge
                 </button>
               </div>
               <p className="text-xs text-slate-400 font-mono">
@@ -258,6 +279,45 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Badge Preview Modal */}
+        {showBadgeModal && (
+          <div className="p-6 bg-slate-900/90 border border-amber-500/30 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-amber-400" />
+                <h2 className="text-lg font-bold text-slate-100">Live Status Badge Integration</h2>
+              </div>
+              <button
+                onClick={() => setShowBadgeModal(false)}
+                className="text-xs text-slate-400 hover:text-slate-200"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3">
+              <div className="text-xs text-slate-400">Live Preview:</div>
+              <div className="py-2">
+                <img src="/api/status/badge" alt="pi-harness health badge" className="h-6" />
+              </div>
+
+              <div className="text-xs text-slate-400 font-mono pt-2 border-t border-slate-900">
+                Markdown Embed Snippet:
+              </div>
+              <div className="p-3 bg-slate-900 rounded-xl font-mono text-xs text-cyan-300 flex items-center justify-between">
+                <code>{badgeMarkdown}</code>
+                <button
+                  onClick={copyBadgeSnippet}
+                  className="px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/20 rounded-md font-sans text-xs flex items-center gap-1 transition"
+                >
+                  {copiedBadge ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedBadge ? 'Copied!' : 'Copy Code'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Live System Health Drawer */}
         {showHealth && health && (
           <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
