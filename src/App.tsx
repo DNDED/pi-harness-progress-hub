@@ -141,6 +141,7 @@ export default function App() {
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
   const [subagentChartMetric, setSubagentChartMetric] = useState<'duration' | 'tokens'>('duration');
+  const [isRunningBenchmark, setIsRunningBenchmark] = useState<boolean>(false);
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [sentinelSearchQuery, setSentinelSearchQuery] = useState<string>('');
   const [sentinelSortBy, setSentinelSortBy] = useState<'default' | 'speed-desc' | 'speed-asc' | 'name'>('default');
@@ -361,6 +362,22 @@ export default function App() {
       }
     } catch {
       setSubagents(prev => prev.filter(s => s.id !== id));
+    }
+  };
+
+  const handleRunBenchmark = async () => {
+    setIsRunningBenchmark(true);
+    try {
+      const res = await fetch('/api/benchmark/run', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        setUpdates(prev => [data.update, ...prev]);
+        playChime();
+      }
+    } catch {
+      // Fallback
+    } finally {
+      setIsRunningBenchmark(false);
     }
   };
 
@@ -923,14 +940,25 @@ export default function App() {
         {/* Live System Health Drawer */}
         {showHealth && health && (
           <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <HeartPulse className="w-5 h-5 text-emerald-400 animate-pulse" />
                 <h2 className="text-lg font-bold text-slate-100">Live Harness Server Health Diagnostics</h2>
               </div>
-              <span className="text-xs font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
-                STATUS: {health.status}
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleRunBenchmark}
+                  disabled={isRunningBenchmark}
+                  className="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+                  title="Run harness performance benchmark suite"
+                >
+                  <Zap className={`w-3.5 h-3.5 text-amber-400 ${isRunningBenchmark ? 'animate-spin' : ''}`} />
+                  <span>{isRunningBenchmark ? 'Benchmarking...' : 'Run Benchmark'}</span>
+                </button>
+                <span className="text-xs font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
+                  STATUS: {health.status}
+                </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
