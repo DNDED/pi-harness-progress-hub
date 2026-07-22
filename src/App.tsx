@@ -705,6 +705,7 @@ export default function App() {
   });
 
   const maxSubagentDuration = Math.max(1, ...subagents.map(s => s.durationMs));
+  const runningSubagentsCount = subagents.filter(s => s.status === 'Running').length;
 
   const subagentModelStats = subagents.reduce((acc, s) => {
     const m = s.model || 'Unknown';
@@ -868,10 +869,16 @@ export default function App() {
             </button>
             <button
               onClick={() => setShowSubagents(!showSubagents)}
-              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded-lg text-xs font-medium border border-cyan-500/30 transition flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded-lg text-xs font-medium border border-cyan-500/30 transition flex items-center gap-1.5 relative"
             >
               <Bot className="w-3.5 h-3.5 text-cyan-400" />
               <span>{showSubagents ? 'Hide Subagents' : `Subagents (${subagents.length})`}</span>
+              {runningSubagentsCount > 0 && (
+                <span className="px-1.5 py-0.5 bg-amber-500 text-slate-950 font-bold rounded-full text-[10px] animate-pulse flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                  {runningSubagentsCount} Active
+                </span>
+              )}
             </button>
             <button
               onClick={() => exportMarkdownLog(isFiltered)}
@@ -1592,7 +1599,12 @@ export default function App() {
                   <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                     <span className="text-cyan-400 font-bold">{s.name}</span>
                     <div className="flex items-center gap-2">
-                      <span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
+                      <span className={`px-1.5 py-0.5 border rounded text-[10px] font-semibold flex items-center gap-1 ${
+                        s.status === 'Running'
+                          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse font-bold'
+                          : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                      }`}>
+                        {s.status === 'Running' && <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>}
                         {s.status}
                       </span>
                       <button
@@ -1639,6 +1651,11 @@ export default function App() {
                     </div>
                   </div>
                   <div className="text-xs text-slate-300">{s.task}</div>
+                  {s.status === 'Running' && (
+                    <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-amber-500/30">
+                      <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 h-full rounded-full animate-pulse w-full"></div>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-900">
                     <span>{s.model}</span>
                     <span>{s.durationMs}ms</span>
