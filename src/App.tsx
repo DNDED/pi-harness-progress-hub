@@ -2016,19 +2016,32 @@ export default function App() {
                 <Star className={`w-3.5 h-3.5 ${onlyBookmarkedFilter ? 'fill-slate-950 text-slate-950' : 'text-amber-400'}`} />
                 <span>Saved ({bookmarkedIds.length})</span>
               </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
-                    selectedCategory === cat
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
-                      : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+              {categories.map((cat) => {
+                const count = cat === 'All'
+                  ? updates.length
+                  : updates.filter((u) => u.category === cat).length;
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap flex items-center gap-1.5 ${
+                      selectedCategory === cat
+                        ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20'
+                        : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                      selectedCategory === cat
+                        ? 'bg-slate-950/20 text-slate-950 font-bold'
+                        : 'bg-slate-800 text-slate-500 font-normal'
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
             <div className="flex items-center gap-2">
