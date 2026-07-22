@@ -1,0 +1,20 @@
+[
+  {
+    "timestamp": "2026-07-22T07:25:10.535Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  },
+  {
+    "timestamp": "2026-07-22T07:25:06.764Z",
+    "uptimeSec": 120,
+    "memoryMb": 64,
+    "activeSentinels": 42,
+    "passRate": "100%",
+    "totalUpdates": 10,
+    "totalSubagents": 5
+  }
+]

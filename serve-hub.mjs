@@ -11,6 +11,7 @@ const DIST_DIR = path.join(__dirname, 'dist');
 const UPDATES_FILE = path.join(__dirname, 'src', 'data', 'updates.json');
 const SUBAGENTS_FILE = path.join(__dirname, 'src', 'data', 'subagents.json');
 const SENTINELS_FILE = path.join(__dirname, 'src', 'data', 'sentinels.json');
+const HEALTH_HISTORY_FILE = path.join(__dirname, 'src', 'data', 'health-history.json');
 const START_TIME = Date.now();
 
 const MIME_TYPES = {
@@ -142,6 +143,19 @@ const server = http.createServer((req, res) => {
       'Content-Disposition': 'attachment; filename="pi-harness-health.csv"'
     });
     res.end(csvData);
+    return;
+  }
+
+  // Health History Endpoint
+  if (url.pathname === '/api/health/history') {
+    if (fs.existsSync(HEALTH_HISTORY_FILE)) {
+      const data = fs.readFileSync(HEALTH_HISTORY_FILE, 'utf-8');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(data);
+    } else {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify([]));
+    }
     return;
   }
 
@@ -361,6 +375,7 @@ server.listen(PORT, () => {
   console.log(`🤖 Subagents API Endpoint: http://localhost:${PORT}/api/subagents`);
   console.log(`🛡️ Sentinels API Endpoint: http://localhost:${PORT}/api/sentinels`);
   console.log(`❤️ Health API Endpoint: http://localhost:${PORT}/api/health`);
+  console.log(`📈 Health History API Endpoint: http://localhost:${PORT}/api/health/history`);
   console.log(`📄 Health JSON Endpoint: http://localhost:${PORT}/api/health/json`);
   console.log(`📊 Health CSV Endpoint: http://localhost:${PORT}/api/health/csv`);
   console.log(`📑 Health Summary Report: http://localhost:${PORT}/api/health/summary`);

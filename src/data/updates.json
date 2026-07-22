@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrcuwz",
+    "timestamp": "2026-07-22T07:25:34.211Z",
+    "relativeTime": "Just now",
+    "title": "System Health Metrics History Recorder & /api/health/history Endpoint",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added health-history.ts engine recording health snapshots and exposed /api/health/history REST route.",
+    "highlights": [
+      "Health History Engine",
+      "Health snapshot recorder & REST endpoint",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrcuwz",
+    "timestamp": "2026-07-22T07:25:34.211Z",
+    "relativeTime": "Just now",
+    "title": "System Health Metrics History Recorder & /api/health/history Endpoint",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added health-history.ts engine recording health snapshots and exposed /api/health/history REST route.",
+    "highlights": [
+      "Health History Engine",
+      "Health snapshot recorder & REST endpoint",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvrbbqq",
     "timestamp": "2026-07-22T07:24:22.706Z",
     "relativeTime": "Just now",
