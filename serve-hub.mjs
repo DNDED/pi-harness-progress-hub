@@ -226,6 +226,25 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // DELETE /api/subagents/item REST Route
+  if (req.method === 'DELETE' && url.pathname === '/api/subagents/item') {
+    try {
+      const targetId = url.searchParams.get('id');
+      let subagents = [];
+      if (fs.existsSync(SUBAGENTS_FILE)) {
+        try { subagents = JSON.parse(fs.readFileSync(SUBAGENTS_FILE, 'utf-8')); } catch { subagents = []; }
+      }
+      subagents = subagents.filter(s => s.id !== targetId);
+      fs.writeFileSync(SUBAGENTS_FILE, JSON.stringify(subagents, null, 2), 'utf-8');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, message: `Subagent ${targetId} deleted`, subagents }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
   // DELETE /api/subagents REST Route
   if (req.method === 'DELETE' && url.pathname === '/api/subagents') {
     try {

@@ -353,6 +353,17 @@ export default function App() {
     }
   };
 
+  const handleDeleteSubagentItem = async (id: string) => {
+    try {
+      const res = await fetch(`/api/subagents/item?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setSubagents(prev => prev.filter(s => s.id !== id));
+      }
+    } catch {
+      setSubagents(prev => prev.filter(s => s.id !== id));
+    }
+  };
+
   useEffect(() => {
     handleRefresh();
     if (!autoPolling) return;
@@ -1366,6 +1377,13 @@ export default function App() {
                       >
                         <RefreshCw className="w-3 h-3 text-indigo-400" />
                         Rerun
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSubagentItem(s.id)}
+                        className="px-1.5 py-0.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                        title="Delete this subagent execution record"
+                      >
+                        <Trash2 className="w-3 h-3 text-rose-400" />
                       </button>
                     </div>
                   </div>

@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvsry6q",
+    "timestamp": "2026-07-22T08:05:17.906Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Individual Record Delete REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented DELETE /api/subagents/item REST route and Delete button on subagent cards in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Item Delete REST API & UI",
+      "DELETE /api/subagents/item REST route",
+      "Enables 1-click removal of individual subagent execution records from telemetry drawer"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvsry6q",
+    "timestamp": "2026-07-22T08:05:17.906Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Individual Record Delete REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented DELETE /api/subagents/item REST route and Delete button on subagent cards in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Item Delete REST API & UI",
+      "DELETE /api/subagents/item REST route",
+      "Enables 1-click removal of individual subagent execution records from telemetry drawer"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvspwy3",
     "timestamp": "2026-07-22T08:03:42.987Z",
     "relativeTime": "Just now",
