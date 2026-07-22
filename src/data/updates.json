@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvqw725",
+    "timestamp": "2026-07-22T07:12:36.797Z",
+    "relativeTime": "Just now",
+    "title": "Sentinel Category Filter Pills in Health Matrix Drawer",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added interactive category filter pills to the Sentinel Health Matrix Drawer.",
+    "highlights": [
+      "Sentinel Category Filter Pills in http://localhost:3050 web app",
+      "Category filtering for 42 proactive sentinels",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvqw725",
+    "timestamp": "2026-07-22T07:12:36.797Z",
+    "relativeTime": "Just now",
+    "title": "Sentinel Category Filter Pills in Health Matrix Drawer",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added interactive category filter pills to the Sentinel Health Matrix Drawer.",
+    "highlights": [
+      "Sentinel Category Filter Pills in http://localhost:3050 web app",
+      "Category filtering for 42 proactive sentinels",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvqurcn",
     "timestamp": "2026-07-22T07:11:29.783Z",
     "relativeTime": "Just now",

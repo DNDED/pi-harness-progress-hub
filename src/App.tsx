@@ -87,6 +87,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
+  const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
@@ -181,6 +182,9 @@ export default function App() {
   });
 
   const filteredSubagents = subagents.filter(s => subagentStatusFilter === 'All' || s.status.toLowerCase() === subagentStatusFilter.toLowerCase());
+
+  const sentinelCategories = ['All', ...Array.from(new Set(sentinels.map(s => s.category)))];
+  const filteredSentinels = sentinels.filter(s => sentinelCategoryFilter === 'All' || s.category === sentinelCategoryFilter);
 
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
 
@@ -382,21 +386,33 @@ export default function App() {
           </div>
         )}
 
-        {/* Sentinels Health Drawer */}
+        {/* Sentinels Health Drawer with Category Filter Pills */}
         {showSentinels && (
           <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <Layers className="w-5 h-5 text-emerald-400" />
                 <h2 className="text-lg font-bold text-slate-100">Proactive Harness Sentinel Health Matrix</h2>
               </div>
-              <span className="text-xs font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
-                {sentinels.length} / {sentinels.length} Active Sentinels (100% Pass)
-              </span>
+              <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 sm:pb-0">
+                {sentinelCategories.map((sc) => (
+                  <button
+                    key={sc}
+                    onClick={() => setSentinelCategoryFilter(sc)}
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition whitespace-nowrap ${
+                      sentinelCategoryFilter === sc
+                        ? 'bg-emerald-500 text-slate-950 font-bold'
+                        : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {sc}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto pr-1">
-              {sentinels.map((s) => (
+              {filteredSentinels.map((s) => (
                 <div key={s.id} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                   <div className="flex items-center justify-between text-xs font-mono">
                     <span className="text-slate-200 font-semibold truncate">{s.name}</span>
