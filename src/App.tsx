@@ -719,6 +719,7 @@ export default function App() {
   const sentinelPassRate = totalSentinelsCount > 0 ? Math.round((passedSentinelsCount / totalSentinelsCount) * 100) : 100;
   const avgSentinelSpeed = totalSentinelsCount > 0 ? Math.round(sentinels.reduce((sum, s) => sum + (s.speedMs || 0), 0) / totalSentinelsCount) : 0;
   const fastestSentinel = sentinels.length > 0 ? [...sentinels].sort((a, b) => (a.speedMs || 0) - (b.speedMs || 0))[0] : null;
+  const maxSentinelSpeed = Math.max(1, ...sentinels.map(s => s.speedMs || 0));
 
   const subagentModelStats = subagents.reduce((acc, s) => {
     const m = s.model || 'Unknown';
@@ -1325,6 +1326,20 @@ export default function App() {
                   <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
                     <span>{s.category}</span>
                     <span>{s.speedMs}ms</span>
+                  </div>
+                  <div className="w-full bg-slate-900 h-1 rounded-full overflow-hidden border border-slate-800/80" title={`Verification speed: ${s.speedMs}ms`}>
+                    <div
+                      className={`h-full rounded-full transition-all duration-300 ${
+                        s.speedMs < 2
+                          ? 'bg-emerald-400'
+                          : s.speedMs < 10
+                          ? 'bg-cyan-400'
+                          : s.speedMs < 50
+                          ? 'bg-amber-400'
+                          : 'bg-rose-500'
+                      }`}
+                      style={{ width: `${Math.min(100, Math.max(8, (s.speedMs / maxSentinelSpeed) * 100))}%` }}
+                    ></div>
                   </div>
                 </div>
               ))}
