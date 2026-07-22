@@ -139,6 +139,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
+  const [subagentModelFilter, setSubagentModelFilter] = useState<string>('All');
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
   const [subagentChartMetric, setSubagentChartMetric] = useState<'duration' | 'tokens'>('duration');
@@ -668,11 +669,12 @@ export default function App() {
 
   const filteredSubagents = subagents.filter(s => {
     const matchesStatus = subagentStatusFilter === 'All' || s.status.toLowerCase() === subagentStatusFilter.toLowerCase();
+    const matchesModel = subagentModelFilter === 'All' || s.model.toLowerCase() === subagentModelFilter.toLowerCase();
     const matchesQuery = subagentSearchQuery === '' ||
       s.name.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
       s.model.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
       s.task.toLowerCase().includes(subagentSearchQuery.toLowerCase());
-    return matchesStatus && matchesQuery;
+    return matchesStatus && matchesModel && matchesQuery;
   }).sort((a, b) => {
     if (subagentSortBy === 'duration-desc') return (b.durationMs || 0) - (a.durationMs || 0);
     if (subagentSortBy === 'duration-asc') return (a.durationMs || 0) - (b.durationMs || 0);
@@ -1359,6 +1361,14 @@ export default function App() {
                     Reset Status
                   </button>
                 )}
+                {subagentModelFilter !== 'All' && (
+                  <button
+                    onClick={() => setSubagentModelFilter('All')}
+                    className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-slate-800 text-indigo-300 hover:text-indigo-200 border border-slate-700 rounded transition"
+                  >
+                    Reset Model
+                  </button>
+                )}
                 <button
                   onClick={() => setShowDispatchModal(true)}
                   className="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
@@ -1402,6 +1412,19 @@ export default function App() {
                     }`}
                   >
                     {st}
+                  </button>
+                ))}
+                {['All Models', 'Gemini 3.6 Flash', 'Claude 3.5 Sonnet', 'GPT-4o'].map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setSubagentModelFilter(m === 'All Models' ? 'All' : m)}
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition ${
+                      (m === 'All Models' && subagentModelFilter === 'All') || subagentModelFilter === m
+                        ? 'bg-indigo-500 text-slate-950 font-bold'
+                        : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {m}
                   </button>
                 ))}
               </div>
