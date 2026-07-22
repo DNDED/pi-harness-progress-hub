@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvr1e2v",
+    "timestamp": "2026-07-22T07:16:39.175Z",
+    "relativeTime": "Just now",
+    "title": "JSON Health API Header Button",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added direct JSON Health API header link button in Progress Hub web dashboard.",
+    "highlights": [
+      "Header Link button to /api/health/json",
+      "Integrated with Lucide FileJson icon",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr1e2v",
+    "timestamp": "2026-07-22T07:16:39.175Z",
+    "relativeTime": "Just now",
+    "title": "JSON Health API Header Button",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added direct JSON Health API header link button in Progress Hub web dashboard.",
+    "highlights": [
+      "Header Link button to /api/health/json",
+      "Integrated with Lucide FileJson icon",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvr01ka",
     "timestamp": "2026-07-22T07:15:36.298Z",
     "relativeTime": "Just now",

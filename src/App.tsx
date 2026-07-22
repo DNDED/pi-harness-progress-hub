@@ -29,7 +29,8 @@ import {
   ExternalLink,
   Keyboard,
   Volume2,
-  VolumeX
+  VolumeX,
+  FileJson
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -291,6 +292,16 @@ export default function App() {
                 >
                   <ExternalLink className="w-3 h-3 text-indigo-400" />
                   Report
+                </a>
+                <a
+                  href="/api/health/json"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-2 py-0.5 text-xs font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 rounded-full flex items-center gap-1 transition"
+                  title="Download System Health JSON"
+                >
+                  <FileJson className="w-3 h-3 text-cyan-400" />
+                  JSON API
                 </a>
                 <button
                   onClick={() => setAudioEnabled(!audioEnabled)}
