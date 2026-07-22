@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvqbfxo",
+    "timestamp": "2026-07-22T06:56:28.524Z",
+    "relativeTime": "Just now",
+    "title": "Live Subagent Execution Telemetry Matrix",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added Live Subagent Telemetry Matrix drawer and REST endpoint (/api/subagents) to Progress Hub to monitor subagent run durations and token stats.",
+    "highlights": [
+      "Subagent Telemetry Matrix drawer added to http://localhost:3050 web app",
+      "C:/Program Files/Git/api/subagents REST endpoint for tracking subagent executions",
+      "Subagent duration, model, and token usage metrics visualization"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvqbfxo",
+    "timestamp": "2026-07-22T06:56:28.524Z",
+    "relativeTime": "Just now",
+    "title": "Live Subagent Execution Telemetry Matrix",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added Live Subagent Telemetry Matrix drawer and REST endpoint (/api/subagents) to Progress Hub to monitor subagent run durations and token stats.",
+    "highlights": [
+      "Subagent Telemetry Matrix drawer added to http://localhost:3050 web app",
+      "C:/Program Files/Git/api/subagents REST endpoint for tracking subagent executions",
+      "Subagent duration, model, and token usage metrics visualization"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvq9u5n",
     "timestamp": "2026-07-22T06:55:13.643Z",
     "relativeTime": "Just now",

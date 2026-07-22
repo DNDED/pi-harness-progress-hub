@@ -10,16 +10,18 @@ import {
   RefreshCw,
   Sparkles,
   Activity,
-  Layers,
   ShieldCheck,
   Search,
   Code2,
   Video,
   Play,
   Download,
-  FileText
+  FileText,
+  Bot,
+  Gauge
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
+import initialSubagents from './data/subagents.json';
 import { ProgressVideo, VideoUpdateItem } from './remotion/ProgressVideo';
 
 interface UpdateItem {
@@ -35,22 +37,42 @@ interface UpdateItem {
   metrics?: Record<string, string | undefined>;
 }
 
+interface SubagentItem {
+  id: string;
+  name: string;
+  model: string;
+  status: string;
+  durationMs: number;
+  timestamp: string;
+  tokensUsed: number;
+  task: string;
+}
+
 export default function App() {
   const [updates, setUpdates] = useState<UpdateItem[]>((initialUpdates as unknown) as UpdateItem[]);
+  const [subagents, setSubagents] = useState<SubagentItem[]>((initialSubagents as unknown) as SubagentItem[]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState<boolean>(false);
+  const [showSubagents, setShowSubagents] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      const res = await fetch('/api/updates?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
+      const [resUpdates, resSubagents] = await Promise.all([
+        fetch('/api/updates?t=' + Date.now()),
+        fetch('/api/subagents?t=' + Date.now())
+      ]);
+      if (resUpdates.ok) {
+        const data = await resUpdates.json();
         setUpdates(data);
+      }
+      if (resSubagents.ok) {
+        const subData = await resSubagents.json();
+        setSubagents(subData);
       }
     } catch {
       // fallback
@@ -132,6 +154,13 @@ export default function App() {
 
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setShowSubagents(!showSubagents)}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded-lg text-xs font-medium border border-cyan-500/30 transition flex items-center gap-1.5"
+            >
+              <Bot className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{showSubagents ? 'Hide Subagents' : `Subagents (${subagents.length})`}</span>
+            </button>
+            <button
               onClick={exportMarkdownLog}
               className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5"
               title="Export Markdown Changelog"
@@ -171,6 +200,39 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Subagents Matrix Drawer */}
+        {showSubagents && (
+          <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Bot className="w-5 h-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-slate-100">Live Subagent Execution Telemetry</h2>
+              </div>
+              <span className="text-xs font-mono text-cyan-300 bg-cyan-500/10 px-2.5 py-1 rounded-md border border-cyan-500/20">
+                {subagents.length} Recorded Subagents
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {subagents.map((s) => (
+                <div key={s.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                    <span className="text-cyan-400 font-bold">{s.name}</span>
+                    <span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
+                      {s.status}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-300">{s.task}</div>
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-900">
+                    <span>{s.model}</span>
+                    <span>{s.durationMs}ms</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Remotion Video Player Section */}
         {showVideo && (
           <div className="p-6 bg-slate-900/80 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
@@ -217,17 +279,17 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">62 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">64 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
             <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-xl group-hover:bg-indigo-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
-              <span>HARNESS SENTINELS</span>
-              <Layers className="w-4 h-4 text-indigo-400" />
+              <span>SUBAGENTS ACTIVE</span>
+              <Gauge className="w-4 h-4 text-indigo-400" />
             </div>
-            <div className="text-3xl font-extrabold font-mono text-indigo-300">42</div>
-            <div className="mt-2 text-xs text-slate-400">Active proactive safety sentinels</div>
+            <div className="text-3xl font-extrabold font-mono text-indigo-300">{subagents.length}</div>
+            <div className="mt-2 text-xs text-slate-400">Subagent execution instances</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
