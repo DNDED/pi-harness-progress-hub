@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvsm115",
+    "timestamp": "2026-07-22T08:00:41.657Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Metric Chart Toggle UI (Duration vs Tokens)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Integrated Duration vs Tokens toggle switch for subagent telemetry distribution bar charts in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Telemetry Chart Metric Toggle UI",
+      "Subagent Metric Toggle UI",
+      "Allows toggling between execution duration (ms) and token usage distribution across subagents"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvsm115",
+    "timestamp": "2026-07-22T08:00:41.657Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Metric Chart Toggle UI (Duration vs Tokens)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Integrated Duration vs Tokens toggle switch for subagent telemetry distribution bar charts in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Telemetry Chart Metric Toggle UI",
+      "Subagent Metric Toggle UI",
+      "Allows toggling between execution duration (ms) and token usage distribution across subagents"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvsk8fu",
     "timestamp": "2026-07-22T07:59:17.946Z",
     "relativeTime": "Just now",
