@@ -129,6 +129,7 @@ export default function App() {
   const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [sentinelSearchQuery, setSentinelSearchQuery] = useState<string>('');
+  const [sentinelSortBy, setSentinelSortBy] = useState<'default' | 'speed-desc' | 'speed-asc' | 'name'>('default');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [autoPolling, setAutoPolling] = useState<boolean>(true);
   const [showVideo, setShowVideo] = useState<boolean>(false);
@@ -450,6 +451,11 @@ export default function App() {
     return new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime();
   });
 
+  const sentinelCategoryCounts = sentinels.reduce((acc, s) => {
+    acc[s.category] = (acc[s.category] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
   const sentinelCategories = ['All', ...Array.from(new Set(sentinels.map(s => s.category)))];
   const filteredSentinels = sentinels.filter(s => {
     const matchesCategory = sentinelCategoryFilter === 'All' || s.category === sentinelCategoryFilter;
@@ -457,6 +463,11 @@ export default function App() {
       s.name.toLowerCase().includes(sentinelSearchQuery.toLowerCase()) ||
       s.category.toLowerCase().includes(sentinelSearchQuery.toLowerCase());
     return matchesCategory && matchesQuery;
+  }).sort((a, b) => {
+    if (sentinelSortBy === 'speed-desc') return (b.speedMs || 0) - (a.speedMs || 0);
+    if (sentinelSortBy === 'speed-asc') return (a.speedMs || 0) - (b.speedMs || 0);
+    if (sentinelSortBy === 'name') return a.name.localeCompare(b.name);
+    return 0;
   });
 
   const maxSubagentDuration = Math.max(1, ...subagents.map(s => s.durationMs));
@@ -927,6 +938,17 @@ export default function App() {
                   <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isReverifyingSentinels ? 'animate-spin' : ''}`} />
                   <span>{isReverifyingSentinels ? 'Verifying...' : 'Re-Verify All'}</span>
                 </button>
+                <select
+                  value={sentinelSortBy}
+                  onChange={(e) => setSentinelSortBy(e.target.value as 'default' | 'speed-desc' | 'speed-asc' | 'name')}
+                  className="px-2 py-1 bg-slate-950 border border-slate-800 rounded-lg text-xs text-emerald-300 font-mono focus:outline-none focus:border-emerald-500 transition cursor-pointer"
+                  title="Sort sentinels by speed or name"
+                >
+                  <option value="default">Default Order</option>
+                  <option value="speed-desc">Slowest First</option>
+                  <option value="speed-asc">Fastest First</option>
+                  <option value="name">Sort by Name</option>
+                </select>
                 <div className="relative">
                   <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
@@ -956,7 +978,7 @@ export default function App() {
                           : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                       }`}
                     >
-                      {sc}
+                      {sc === 'All' ? `All (${sentinels.length})` : `${sc} (${sentinelCategoryCounts[sc] || 0})`}
                     </button>
                   ))}
                 </div>

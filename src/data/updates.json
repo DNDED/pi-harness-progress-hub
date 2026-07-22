@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvsac4u",
+    "timestamp": "2026-07-22T07:51:36.174Z",
+    "relativeTime": "Just now",
+    "title": "Sentinel Matrix Dynamic Sort Controls & Category Count Badges UI",
+    "category": "Sentinels",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added speed/name sorting dropdown and per-category count badges (e.g. Security (6)) in Sentinel Health Matrix.",
+    "highlights": [
+      "Sentinel Sort Controls & Count Badges UI",
+      "Sentinel Sorting & Category Counts",
+      "Enables sorting sentinels by execution speed or name and displays exact sentinel counts per category"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvsac4u",
+    "timestamp": "2026-07-22T07:51:36.174Z",
+    "relativeTime": "Just now",
+    "title": "Sentinel Matrix Dynamic Sort Controls & Category Count Badges UI",
+    "category": "Sentinels",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added speed/name sorting dropdown and per-category count badges (e.g. Security (6)) in Sentinel Health Matrix.",
+    "highlights": [
+      "Sentinel Sort Controls & Count Badges UI",
+      "Sentinel Sorting & Category Counts",
+      "Enables sorting sentinels by execution speed or name and displays exact sentinel counts per category"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvs8vmq",
     "timestamp": "2026-07-22T07:50:28.130Z",
     "relativeTime": "Just now",
