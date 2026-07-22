@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvs8vmq",
+    "timestamp": "2026-07-22T07:50:28.130Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Dynamic Sort Controls UI",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added a dynamic sorting dropdown (Newest, Slowest, Fastest, Most Tokens) in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Sort Controls UI",
+      "Subagent Sorting Dropdown",
+      "Enables instant sorting of subagent executions by duration, tokens, or age"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvs8vmq",
+    "timestamp": "2026-07-22T07:50:28.130Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Dynamic Sort Controls UI",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added a dynamic sorting dropdown (Newest, Slowest, Fastest, Most Tokens) in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Sort Controls UI",
+      "Subagent Sorting Dropdown",
+      "Enables instant sorting of subagent executions by duration, tokens, or age"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvs7b97",
     "timestamp": "2026-07-22T07:49:15.067Z",
     "relativeTime": "Just now",

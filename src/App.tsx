@@ -126,6 +126,7 @@ export default function App() {
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
+  const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [sentinelSearchQuery, setSentinelSearchQuery] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -442,6 +443,11 @@ export default function App() {
       s.model.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
       s.task.toLowerCase().includes(subagentSearchQuery.toLowerCase());
     return matchesStatus && matchesQuery;
+  }).sort((a, b) => {
+    if (subagentSortBy === 'duration-desc') return (b.durationMs || 0) - (a.durationMs || 0);
+    if (subagentSortBy === 'duration-asc') return (a.durationMs || 0) - (b.durationMs || 0);
+    if (subagentSortBy === 'tokens-desc') return (b.tokensUsed || 0) - (a.tokensUsed || 0);
+    return new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime();
   });
 
   const sentinelCategories = ['All', ...Array.from(new Set(sentinels.map(s => s.category)))];
@@ -1038,6 +1044,17 @@ export default function App() {
                     </button>
                   )}
                 </div>
+                <select
+                  value={subagentSortBy}
+                  onChange={(e) => setSubagentSortBy(e.target.value as 'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc')}
+                  className="px-2 py-1 bg-slate-950 border border-slate-800 rounded-lg text-xs text-cyan-300 font-mono focus:outline-none focus:border-cyan-500 transition cursor-pointer"
+                  title="Sort subagent executions by metric"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="duration-desc">Slowest First</option>
+                  <option value="duration-asc">Fastest First</option>
+                  <option value="tokens-desc">Most Tokens</option>
+                </select>
                 {subagentStatusFilter !== 'All' && (
                   <button
                     onClick={() => setSubagentStatusFilter('All')}
