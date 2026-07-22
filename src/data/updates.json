@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvr8azx",
+    "timestamp": "2026-07-22T07:22:01.773Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatcher Modal UI & Subagent Task Engine",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added interactive Subagent Dispatcher modal in Progress Hub UI allowing live task dispatching.",
+    "highlights": [
+      "Subagent Dispatcher UI",
+      "Live subagent execution modal",
+      "100% test pass rate across 125 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr8azx",
+    "timestamp": "2026-07-22T07:22:01.773Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatcher Modal UI & Subagent Task Engine",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added interactive Subagent Dispatcher modal in Progress Hub UI allowing live task dispatching.",
+    "highlights": [
+      "Subagent Dispatcher UI",
+      "Live subagent execution modal",
+      "100% test pass rate across 125 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvr76gz",
     "timestamp": "2026-07-22T07:21:09.251Z",
     "relativeTime": "Just now",

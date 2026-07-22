@@ -32,7 +32,8 @@ import {
   VolumeX,
   FileJson,
   Palette,
-  X
+  X,
+  Plus
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -102,6 +103,9 @@ export default function App() {
   const [showHealth, setShowHealth] = useState<boolean>(false);
   const [showBadgeModal, setShowBadgeModal] = useState<boolean>(false);
   const [showHotkeyModal, setShowHotkeyModal] = useState<boolean>(false);
+  const [showDispatchModal, setShowDispatchModal] = useState<boolean>(false);
+  const [dispatchName, setDispatchName] = useState<string>('WorkerAgent');
+  const [dispatchTask, setDispatchTask] = useState<string>('Autonomous harness inspection & optimization');
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
   const [activeTheme, setActiveTheme] = useState<'slate' | 'cyber' | 'obsidian'>('slate');
@@ -169,6 +173,42 @@ export default function App() {
     } finally {
       setTimeout(() => setIsRefreshing(false), 500);
     }
+  };
+
+  const handleDispatchSubagent = () => {
+    if (!dispatchName || !dispatchTask) return;
+    const newSubagent: SubagentItem = {
+      id: `sub-${Date.now()}`,
+      name: dispatchName,
+      model: 'Gemini 3.6 Flash',
+      status: 'Completed',
+      durationMs: Math.floor(Math.random() * 200) + 150,
+      timestamp: new Date().toISOString(),
+      tokensUsed: Math.floor(Math.random() * 400) + 100,
+      task: dispatchTask
+    };
+
+    const newUpdate: UpdateItem = {
+      id: `up-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      relativeTime: 'Just now',
+      title: `Subagent Dispatched: ${dispatchName}`,
+      category: 'Subagents',
+      status: 'Completed',
+      author: dispatchName,
+      description: `Dispatched task "${dispatchTask}" using model Gemini 3.6 Flash.`,
+      highlights: [
+        `Agent: ${dispatchName}`,
+        `Task: ${dispatchTask}`,
+        `Duration: ${newSubagent.durationMs}ms`,
+        `Tokens: ${newSubagent.tokensUsed}`
+      ]
+    };
+
+    setSubagents(prev => [newSubagent, ...prev]);
+    setUpdates(prev => [newUpdate, ...prev]);
+    setShowDispatchModal(false);
+    playChime();
   };
 
   useEffect(() => {
@@ -418,6 +458,60 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Subagent Dispatcher Modal */}
+        {showDispatchModal && (
+          <div className="p-6 bg-slate-900/95 border border-cyan-500/40 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Bot className="w-5 h-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-slate-100">Dispatch New Subagent Execution Task</h2>
+              </div>
+              <button
+                onClick={() => setShowDispatchModal(false)}
+                className="text-xs text-slate-400 hover:text-slate-200"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div>
+                <label className="text-slate-400 block mb-1">Subagent Name:</label>
+                <input
+                  type="text"
+                  value={dispatchName}
+                  onChange={(e) => setDispatchName(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Task Prompt / Description:</label>
+                <textarea
+                  value={dispatchTask}
+                  onChange={(e) => setDispatchTask(e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500"
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  onClick={() => setShowDispatchModal(false)}
+                  className="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl hover:bg-slate-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDispatchSubagent}
+                  className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl shadow-lg flex items-center gap-1.5"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Dispatch Subagent</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Hotkey Guide Modal */}
         {showHotkeyModal && (
           <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
@@ -643,15 +737,22 @@ export default function App() {
           </div>
         )}
 
-        {/* Subagents Matrix Drawer with Status Filter */}
+        {/* Subagents Matrix Drawer with Dispatch Button */}
         {showSubagents && (
           <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-cyan-400" />
                 <h2 className="text-lg font-bold text-slate-100">Live Subagent Execution Telemetry</h2>
               </div>
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowDispatchModal(true)}
+                  className="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Dispatch Task</span>
+                </button>
                 {['All', 'Completed', 'Running'].map((st) => (
                   <button
                     key={st}
@@ -734,7 +835,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">124 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">125 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
