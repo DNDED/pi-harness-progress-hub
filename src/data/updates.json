@@ -1,5 +1,235 @@
 [
   {
+    "id": "upd-mrvq42oe",
+    "timestamp": "2026-07-22T06:50:44.750Z",
+    "relativeTime": "Just now",
+    "title": "Live Harness Telemetry & Subagent Tracker Engine",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added TUI Telemetry Status Bar Widget (telemetry-widget.ts) and Subagent Run Duration & Metrics Logger (subagent-telemetry.ts) with real-time Vertex Gemini model tracking.",
+    "highlights": [
+      "TUI Status Bar Widget renders active model, RAM, sentinel cache hits, and loop round",
+      "Subagent Telemetry Logger tracks start/end durations and auto-dispatches progress records",
+      "All 60 core Powerhouse test suites and 42 proactive sentinels passing 100%"
+    ],
+    "metrics": {
+      "telemetryBar": "Active",
+      "subagentTracker": "Ready",
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvq42oe",
+    "timestamp": "2026-07-22T06:50:44.750Z",
+    "relativeTime": "Just now",
+    "title": "Live Harness Telemetry & Subagent Tracker Engine",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added TUI Telemetry Status Bar Widget (telemetry-widget.ts) and Subagent Run Duration & Metrics Logger (subagent-telemetry.ts) with real-time Vertex Gemini model tracking.",
+    "highlights": [
+      "TUI Status Bar Widget renders active model, RAM, sentinel cache hits, and loop round",
+      "Subagent Telemetry Logger tracks start/end durations and auto-dispatches progress records",
+      "All 60 core Powerhouse test suites and 42 proactive sentinels passing 100%"
+    ],
+    "metrics": {
+      "telemetryBar": "Active",
+      "subagentTracker": "Ready",
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvq3p4p",
+    "timestamp": "2026-07-22T06:50:27.193Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvq3p4p",
+    "timestamp": "2026-07-22T06:50:27.193Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvq318j",
+    "timestamp": "2026-07-22T06:49:56.227Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 12ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.01s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.01s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvq3187",
+    "timestamp": "2026-07-22T06:49:56.215Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: Research-Agent-01",
+    "category": "Subagents",
+    "status": "Active",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Dispatched subagent 'Research-Agent-01' with model Vertex Gemini 3.6 Flash. Task: Inspect harness performance...",
+    "highlights": [
+      "Model: Vertex Gemini 3.6 Flash",
+      "Task ID: test-sub-1",
+      "Status: Running"
+    ],
+    "metrics": {
+      "subagent": "Research-Agent-01",
+      "model": "Vertex Gemini 3.6 Flash",
+      "status": "Running"
+    }
+  },
+  {
+    "id": "upd-mrvq318j",
+    "timestamp": "2026-07-22T06:49:56.227Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 12ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.01s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.01s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvq3187",
+    "timestamp": "2026-07-22T06:49:56.215Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: Research-Agent-01",
+    "category": "Subagents",
+    "status": "Active",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Dispatched subagent 'Research-Agent-01' with model Vertex Gemini 3.6 Flash. Task: Inspect harness performance...",
+    "highlights": [
+      "Model: Vertex Gemini 3.6 Flash",
+      "Task ID: test-sub-1",
+      "Status: Running"
+    ],
+    "metrics": {
+      "subagent": "Research-Agent-01",
+      "model": "Vertex Gemini 3.6 Flash",
+      "status": "Running"
+    }
+  },
+  {
+    "id": "upd-mrvq2tz5",
+    "timestamp": "2026-07-22T06:49:46.817Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 14ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.01s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.01s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvq2tyr",
+    "timestamp": "2026-07-22T06:49:46.803Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: Research-Agent-01",
+    "category": "Subagents",
+    "status": "Active",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Dispatched subagent 'Research-Agent-01' with model Vertex Gemini 3.6 Flash. Task: Inspect harness performance...",
+    "highlights": [
+      "Model: Vertex Gemini 3.6 Flash",
+      "Task ID: test-sub-1",
+      "Status: Running"
+    ],
+    "metrics": {
+      "subagent": "Research-Agent-01",
+      "model": "Vertex Gemini 3.6 Flash",
+      "status": "Running"
+    }
+  },
+  {
+    "id": "upd-mrvq2tz5",
+    "timestamp": "2026-07-22T06:49:46.817Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Completed: Research-Agent-01 (completed)",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Subagent 'Research-Agent-01' finished in 14ms with status 'completed'.",
+    "highlights": [
+      "Duration: 0.01s",
+      "Model: Vertex Gemini 3.6 Flash",
+      "Final Status: completed"
+    ],
+    "metrics": {
+      "duration": "0.01s",
+      "status": "completed"
+    }
+  },
+  {
+    "id": "upd-mrvq2tyr",
+    "timestamp": "2026-07-22T06:49:46.803Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: Research-Agent-01",
+    "category": "Subagents",
+    "status": "Active",
+    "author": "pi-agent (Research-Agent-01)",
+    "description": "Dispatched subagent 'Research-Agent-01' with model Vertex Gemini 3.6 Flash. Task: Inspect harness performance...",
+    "highlights": [
+      "Model: Vertex Gemini 3.6 Flash",
+      "Task ID: test-sub-1",
+      "Status: Running"
+    ],
+    "metrics": {
+      "subagent": "Research-Agent-01",
+      "model": "Vertex Gemini 3.6 Flash",
+      "status": "Running"
+    }
+  },
+  {
     "id": "upd-mrvq1a4g",
     "timestamp": "2026-07-22T06:48:34.432Z",
     "relativeTime": "Just now",
