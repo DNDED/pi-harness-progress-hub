@@ -143,6 +143,7 @@ export default function App() {
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
   const [subagentChartMetric, setSubagentChartMetric] = useState<'duration' | 'tokens' | 'models'>('duration');
+  const [subagentChartTopN, setSubagentChartTopN] = useState<number>(5);
   const [isRunningBenchmark, setIsRunningBenchmark] = useState<boolean>(false);
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [sentinelSearchQuery, setSentinelSearchQuery] = useState<string>('');
@@ -1507,6 +1508,16 @@ export default function App() {
                         Models
                       </button>
                     </div>
+                    <select
+                      value={subagentChartTopN}
+                      onChange={(e) => setSubagentChartTopN(Number(e.target.value))}
+                      className="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-lg text-[10px] text-cyan-300 font-mono focus:outline-none focus:border-cyan-500 transition cursor-pointer"
+                      title="Filter number of items shown in chart"
+                    >
+                      <option value={5}>Top 5</option>
+                      <option value={10}>Top 10</option>
+                      <option value={0}>Show All ({subagents.length})</option>
+                    </select>
                     <span className="text-cyan-300">
                       Max: {subagentChartMetric === 'duration'
                         ? `${maxSubagentDuration}ms`
@@ -1540,7 +1551,7 @@ export default function App() {
                       );
                     })
                   ) : (
-                    subagents.slice(0, 5).map((s) => {
+                    (subagentChartTopN === 0 ? subagents : subagents.slice(0, subagentChartTopN)).map((s) => {
                       const maxVal = subagentChartMetric === 'duration'
                         ? maxSubagentDuration
                         : Math.max(...subagents.map(item => item.tokensUsed || 0), 1);
