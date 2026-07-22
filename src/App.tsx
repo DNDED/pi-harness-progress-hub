@@ -305,32 +305,51 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const exportMarkdownLog = () => {
+  const exportMarkdownLog = (useFiltered: boolean = isFiltered) => {
+    const list = useFiltered ? filteredUpdates : updates;
     const md = `# Pi Agent Harness — Continuous Improvement Log\n\n` +
       `*Generated on ${new Date().toLocaleString()} • http://localhost:3050*\n\n` +
-      updates.map((u, i) => (
+      list.map((u, i) => (
         `### ${i + 1}. ${u.title} [${u.category}]\n` +
         `**Status**: ${u.status} | **Author**: ${u.author} | **Time**: ${u.relativeTime}\n\n` +
         `${u.description}\n\n` +
-        `**Key Improvements:**\n` +
-        u.highlights.map(h => `- ${h}`).join('\n') + '\n\n'
+        (u.highlights && u.highlights.length > 0 ? `**Key Improvements:**\n` + u.highlights.map(h => `- ${h}`).join('\n') + '\n\n' : '')
       )).join('---\n\n');
 
     const blob = new Blob([md], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pi-harness-changelog-${Date.now()}.md`;
+    a.download = `pi-harness-changelog-${useFiltered ? 'filtered-' : ''}${Date.now()}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const exportJsonLog = () => {
-    const blob = new Blob([JSON.stringify(updates, null, 2)], { type: 'application/json' });
+  const exportJsonLog = (useFiltered: boolean = isFiltered) => {
+    const list = useFiltered ? filteredUpdates : updates;
+    const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pi-harness-updates-${Date.now()}.json`;
+    a.download = `pi-harness-updates-${useFiltered ? 'filtered-' : ''}${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportCsvLog = (useFiltered: boolean = isFiltered) => {
+    const list = useFiltered ? filteredUpdates : updates;
+    const rows = ['id,timestamp,title,category,status,author,description'];
+    for (const item of list) {
+      const title = `"${(item.title || '').replace(/"/g, '""')}"`;
+      const cat = `"${(item.category || '').replace(/"/g, '""')}"`;
+      const desc = `"${(item.description || '').replace(/"/g, '""')}"`;
+      rows.push(`${item.id},${item.timestamp},${title},${cat},${item.status},${item.author},${desc}`);
+    }
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pi-harness-updates-${useFiltered ? 'filtered-' : ''}${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -556,20 +575,28 @@ export default function App() {
               <span>{showSubagents ? 'Hide Subagents' : `Subagents (${subagents.length})`}</span>
             </button>
             <button
-              onClick={exportMarkdownLog}
+              onClick={() => exportMarkdownLog(isFiltered)}
               className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5"
-              title="Export Markdown Changelog"
+              title={isFiltered ? "Export Filtered Markdown Changelog" : "Export Markdown Changelog"}
             >
               <FileText className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden md:inline">Markdown</span>
+              <span className="hidden md:inline">{isFiltered ? 'MD (Filtered)' : 'MD'}</span>
             </button>
             <button
-              onClick={exportJsonLog}
+              onClick={() => exportJsonLog(isFiltered)}
               className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5"
-              title="Export JSON Updates"
+              title={isFiltered ? "Export Filtered JSON Updates" : "Export JSON Updates"}
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden md:inline">JSON</span>
+              <span className="hidden md:inline">{isFiltered ? 'JSON (Filtered)' : 'JSON'}</span>
+            </button>
+            <button
+              onClick={() => exportCsvLog(isFiltered)}
+              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5"
+              title={isFiltered ? "Export Filtered CSV Updates" : "Export CSV Updates"}
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden md:inline">{isFiltered ? 'CSV (Filtered)' : 'CSV'}</span>
             </button>
             <button
               onClick={() => setShowVideo(!showVideo)}

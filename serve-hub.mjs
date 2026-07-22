@@ -146,6 +146,73 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Filtered Export Endpoint
+  if (url.pathname === '/api/export') {
+    const format = (url.searchParams.get('format') || 'json').toLowerCase();
+    const category = url.searchParams.get('category') || '';
+    const search = (url.searchParams.get('search') || '').toLowerCase();
+
+    let updates = [];
+    try {
+      if (fs.existsSync(UPDATES_FILE)) {
+        updates = JSON.parse(fs.readFileSync(UPDATES_FILE, 'utf-8'));
+      }
+    } catch {
+      updates = [];
+    }
+
+    let filtered = updates;
+    if (category && category !== 'All') {
+      filtered = filtered.filter(u => u.category === category);
+    }
+    if (search) {
+      filtered = filtered.filter(u =>
+        u.title.toLowerCase().includes(search) ||
+        u.description.toLowerCase().includes(search) ||
+        u.author.toLowerCase().includes(search)
+      );
+    }
+
+    if (format === 'csv') {
+      const csvRows = ['id,timestamp,title,category,status,author,description'];
+      for (const item of filtered) {
+        const title = `"${(item.title || '').replace(/"/g, '""')}"`;
+        const cat = `"${(item.category || '').replace(/"/g, '""')}"`;
+        const desc = `"${(item.description || '').replace(/"/g, '""')}"`;
+        csvRows.push(`${item.id},${item.timestamp},${title},${cat},${item.status},${item.author},${desc}`);
+      }
+      res.writeHead(200, {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': `attachment; filename="pi-updates-export-${Date.now()}.csv"`
+      });
+      res.end(csvRows.join('\n'));
+      return;
+    } else if (format === 'md' || format === 'markdown') {
+      const md = `# Pi Agent Harness Filtered Export\n\n` +
+        `*Exported ${filtered.length} updates on ${new Date().toLocaleString()}*\n\n` +
+        filtered.map((u, i) => (
+          `### ${i + 1}. ${u.title} [${u.category}]\n` +
+          `**Status**: ${u.status} | **Author**: ${u.author} | **Time**: ${u.relativeTime || u.timestamp}\n\n` +
+          `${u.description}\n\n` +
+          (u.highlights ? `**Highlights:**\n` + u.highlights.map(h => `- ${h}`).join('\n') + '\n\n' : '')
+        )).join('---\n\n');
+
+      res.writeHead(200, {
+        'Content-Type': 'text/markdown',
+        'Content-Disposition': `attachment; filename="pi-updates-export-${Date.now()}.md"`
+      });
+      res.end(md);
+      return;
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Content-Disposition': `attachment; filename="pi-updates-export-${Date.now()}.json"`
+      });
+      res.end(JSON.stringify(filtered, null, 2));
+      return;
+    }
+  }
+
   // Health History Endpoint
   if (url.pathname === '/api/health/history') {
     if (fs.existsSync(HEALTH_HISTORY_FILE)) {
