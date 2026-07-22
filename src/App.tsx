@@ -970,6 +970,15 @@ export default function App() {
                   <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isReverifyingSentinels ? 'animate-spin' : ''}`} />
                   <span>{isReverifyingSentinels ? 'Verifying...' : 'Re-Verify All'}</span>
                 </button>
+                <a
+                  href="/api/sentinels/export?format=csv"
+                  download="pi-sentinels-telemetry.csv"
+                  className="px-2.5 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                  title="Export sentinel benchmark records to CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Export CSV</span>
+                </a>
                 <select
                   value={sentinelSortBy}
                   onChange={(e) => setSentinelSortBy(e.target.value as 'default' | 'speed-desc' | 'speed-asc' | 'name')}

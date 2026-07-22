@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvsk8fu",
+    "timestamp": "2026-07-22T07:59:17.946Z",
+    "relativeTime": "Just now",
+    "title": "Sentinel Telemetry Export REST API & UI Link",
+    "category": "Sentinels",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/sentinels/export REST endpoint (CSV/JSON/MD) and Export CSV link in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Sentinel Telemetry Export REST Route & UI Link",
+      "C:/Program Files/Git/api/sentinels/export REST route",
+      "Enables 1-click download of sentinel benchmark records in CSV, JSON, or Markdown formats"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvsk8fu",
+    "timestamp": "2026-07-22T07:59:17.946Z",
+    "relativeTime": "Just now",
+    "title": "Sentinel Telemetry Export REST API & UI Link",
+    "category": "Sentinels",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/sentinels/export REST endpoint (CSV/JSON/MD) and Export CSV link in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Sentinel Telemetry Export REST Route & UI Link",
+      "C:/Program Files/Git/api/sentinels/export REST route",
+      "Enables 1-click download of sentinel benchmark records in CSV, JSON, or Markdown formats"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvsibae",
     "timestamp": "2026-07-22T07:57:48.326Z",
     "relativeTime": "Just now",

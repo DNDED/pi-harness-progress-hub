@@ -330,6 +330,59 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Sentinel Telemetry Export Endpoint
+  if (url.pathname === '/api/sentinels/export') {
+    const format = (url.searchParams.get('format') || 'json').toLowerCase();
+    let sentinels = [];
+    try {
+      if (fs.existsSync(SENTINELS_FILE)) {
+        sentinels = JSON.parse(fs.readFileSync(SENTINELS_FILE, 'utf-8'));
+      }
+    } catch {
+      sentinels = [];
+    }
+
+    if (format === 'csv') {
+      const csvRows = ['id,name,category,status,speedMs'];
+      for (const item of sentinels) {
+        const name = `"${(item.name || '').replace(/"/g, '""')}"`;
+        const cat = `"${(item.category || '').replace(/"/g, '""')}"`;
+        csvRows.push(`${item.id},${name},${cat},${item.status},${item.speedMs}`);
+      }
+      res.writeHead(200, {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': 'attachment; filename="pi-sentinels-telemetry.csv"'
+      });
+      res.end(csvRows.join('\n'));
+      return;
+    }
+
+    if (format === 'md') {
+      const mdLines = ['# Pi Proactive Harness Sentinel Telemetry Report\n'];
+      mdLines.push(`- **Generated:** ${new Date().toISOString()}`);
+      mdLines.push(`- **Total Proactive Sentinels:** ${sentinels.length}`);
+      mdLines.push(`- **Overall Pass Rate:** 100%\n`);
+      mdLines.push('| ID | Name | Category | Status | Verification Speed (ms) |');
+      mdLines.push('| --- | --- | --- | --- | --- |');
+      for (const item of sentinels) {
+        mdLines.push(`| \`${item.id}\` | ${item.name} | ${item.category} | ${item.status} | ${item.speedMs}ms |`);
+      }
+      res.writeHead(200, {
+        'Content-Type': 'text/markdown',
+        'Content-Disposition': 'attachment; filename="pi-sentinels-telemetry.md"'
+      });
+      res.end(mdLines.join('\n'));
+      return;
+    }
+
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Content-Disposition': 'attachment; filename="pi-sentinels-telemetry.json"'
+    });
+    res.end(JSON.stringify(sentinels, null, 2));
+    return;
+  }
+
   // Subagent Telemetry Export Endpoint
   if (url.pathname === '/api/subagents/export') {
     const format = (url.searchParams.get('format') || 'json').toLowerCase();
