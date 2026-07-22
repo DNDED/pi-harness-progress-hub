@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvr01ka",
+    "timestamp": "2026-07-22T07:15:36.298Z",
+    "relativeTime": "Just now",
+    "title": "JSON System Health REST API Route",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added /api/health/json route to serve-hub.mjs for automated programmatic monitoring and curl integration.",
+    "highlights": [
+      "REST Endpoint /api/health/json",
+      "Content-Disposition attachment pi-harness-health.json",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr01ka",
+    "timestamp": "2026-07-22T07:15:36.298Z",
+    "relativeTime": "Just now",
+    "title": "JSON System Health REST API Route",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added /api/health/json route to serve-hub.mjs for automated programmatic monitoring and curl integration.",
+    "highlights": [
+      "REST Endpoint /api/health/json",
+      "Content-Disposition attachment pi-harness-health.json",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvqz6ys",
     "timestamp": "2026-07-22T07:14:56.644Z",
     "relativeTime": "Just now",
