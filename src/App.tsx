@@ -142,6 +142,7 @@ export default function App() {
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
   const [subagentModelFilter, setSubagentModelFilter] = useState<string>('All');
+  const [subagentSpeedFilter, setSubagentSpeedFilter] = useState<'All' | 'High' | 'Standard'>('All');
   const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [subagentSortBy, setSubagentSortBy] = useState<'newest' | 'duration-desc' | 'duration-asc' | 'tokens-desc'>('newest');
   const [subagentChartMetric, setSubagentChartMetric] = useState<'duration' | 'tokens' | 'models'>('duration');
@@ -677,11 +678,15 @@ export default function App() {
   const filteredSubagents = subagents.filter(s => {
     const matchesStatus = subagentStatusFilter === 'All' || s.status.toLowerCase() === subagentStatusFilter.toLowerCase();
     const matchesModel = subagentModelFilter === 'All' || s.model.toLowerCase() === subagentModelFilter.toLowerCase();
+    const tokSec = (s.tokensUsed || 0) / Math.max(0.1, (s.durationMs / 1000));
+    const matchesSpeed = subagentSpeedFilter === 'All' ||
+      (subagentSpeedFilter === 'High' && tokSec >= 20) ||
+      (subagentSpeedFilter === 'Standard' && tokSec < 20);
     const matchesQuery = subagentSearchQuery === '' ||
       s.name.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
       s.model.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
       s.task.toLowerCase().includes(subagentSearchQuery.toLowerCase());
-    return matchesStatus && matchesModel && matchesQuery;
+    return matchesStatus && matchesModel && matchesSpeed && matchesQuery;
   }).sort((a, b) => {
     if (subagentSortBy === 'duration-desc') return (b.durationMs || 0) - (a.durationMs || 0);
     if (subagentSortBy === 'duration-asc') return (a.durationMs || 0) - (b.durationMs || 0);
@@ -1580,6 +1585,14 @@ export default function App() {
                     Reset Model
                   </button>
                 )}
+                {subagentSpeedFilter !== 'All' && (
+                  <button
+                    onClick={() => setSubagentSpeedFilter('All')}
+                    className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-slate-800 text-amber-300 hover:text-amber-200 border border-slate-700 rounded transition"
+                  >
+                    Reset Speed
+                  </button>
+                )}
                 <button
                   onClick={() => setShowDispatchModal(true)}
                   className="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
@@ -1638,6 +1651,22 @@ export default function App() {
                     {m}
                   </button>
                 ))}
+                {['All Speeds', 'High (>20 tok/s)', 'Standard (<20 tok/s)'].map((sp) => {
+                  const val = sp.startsWith('All') ? 'All' : sp.startsWith('High') ? 'High' : 'Standard';
+                  return (
+                    <button
+                      key={sp}
+                      onClick={() => setSubagentSpeedFilter(val)}
+                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition ${
+                        subagentSpeedFilter === val
+                          ? 'bg-amber-500 text-slate-950 font-bold'
+                          : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      {sp}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
