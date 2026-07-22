@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Player } from '@remotion/player';
 import {
   Zap,
@@ -27,7 +27,9 @@ import {
   Copy,
   Check,
   ExternalLink,
-  Keyboard
+  Keyboard,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -98,6 +100,34 @@ export default function App() {
   const [showBadgeModal, setShowBadgeModal] = useState<boolean>(false);
   const [showHotkeyModal, setShowHotkeyModal] = useState<boolean>(false);
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false);
+  const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
+
+  const prevUpdateCountRef = useRef<number>(updates.length);
+
+  const playChime = () => {
+    if (!audioEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    } catch {
+      // AudioContext fallback
+    }
+  };
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
   const searchSuggestions = ['Sentinel', 'Subagent', 'Remotion', 'Health', 'Vault', 'Exporter'];
@@ -111,7 +141,14 @@ export default function App() {
         fetch('/api/sentinels?t=' + Date.now()),
         fetch('/api/health?t=' + Date.now())
       ]);
-      if (resUpdates.ok) setUpdates(await resUpdates.json());
+      if (resUpdates.ok) {
+        const newUpdates = await resUpdates.json();
+        if (newUpdates.length > prevUpdateCountRef.current) {
+          playChime();
+        }
+        prevUpdateCountRef.current = newUpdates.length;
+        setUpdates(newUpdates);
+      }
       if (resSubagents.ok) setSubagents(await resSubagents.json());
       if (resSentinels.ok) setSentinels(await resSentinels.json());
       if (resHealth.ok) setHealth(await resHealth.json());
@@ -126,7 +163,7 @@ export default function App() {
     handleRefresh();
     const interval = setInterval(handleRefresh, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [audioEnabled]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -145,6 +182,8 @@ export default function App() {
         setShowVideo(prev => !prev);
       } else if (e.key.toLowerCase() === 'a') {
         setShowAnalytics(prev => !prev);
+      } else if (e.key.toLowerCase() === 'm') {
+        setAudioEnabled(prev => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -253,6 +292,17 @@ export default function App() {
                   <ExternalLink className="w-3 h-3 text-indigo-400" />
                   Report
                 </a>
+                <button
+                  onClick={() => setAudioEnabled(!audioEnabled)}
+                  className={`p-1 border rounded-md text-xs transition ${
+                    audioEnabled
+                      ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300'
+                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200'
+                  }`}
+                  title={audioEnabled ? 'Audio Chimes Enabled (M)' : 'Audio Chimes Muted (M)'}
+                >
+                  {audioEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                </button>
                 <button
                   onClick={() => setShowHotkeyModal(!showHotkeyModal)}
                   className="p-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 rounded-md text-xs transition"
@@ -373,6 +423,10 @@ export default function App() {
               <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
                 <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">A</span>
                 <span className="text-slate-300">Toggle Analytics</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">M</span>
+                <span className="text-slate-300">Toggle Audio Mute</span>
               </div>
             </div>
           </div>
