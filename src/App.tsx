@@ -31,7 +31,8 @@ import {
   Volume2,
   VolumeX,
   FileJson,
-  Palette
+  Palette,
+  X
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -134,6 +135,14 @@ export default function App() {
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
   const searchSuggestions = ['Sentinel', 'Subagent', 'Remotion', 'Health', 'Vault', 'Exporter'];
+
+  const resetAllFilters = () => {
+    setSelectedCategory('All');
+    setSearchQuery('');
+    setSelectedTag('');
+    setSubagentStatusFilter('All');
+    setSentinelCategoryFilter('All');
+  };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -262,6 +271,8 @@ export default function App() {
     if (activeTheme === 'obsidian') return 'bg-black text-slate-200';
     return 'bg-slate-950 text-slate-100';
   };
+
+  const isFiltered = selectedCategory !== 'All' || searchQuery !== '' || selectedTag !== '';
 
   return (
     <div className={`min-h-screen ${getThemeBg()} flex flex-col transition-colors duration-300`}>
@@ -766,15 +777,27 @@ export default function App() {
               ))}
             </div>
 
-            <div className="relative w-full sm:w-64">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
-                type="text"
-                placeholder="Search updates..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
-              />
+            <div className="flex items-center gap-2">
+              {isFiltered && (
+                <button
+                  onClick={resetAllFilters}
+                  className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold border border-slate-700 flex items-center gap-1 transition"
+                  title="Clear all active filters"
+                >
+                  <X className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Reset Filters</span>
+                </button>
+              )}
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  placeholder="Search updates..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
             </div>
           </div>
 

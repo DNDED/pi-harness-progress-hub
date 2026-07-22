@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvr5w7a",
+    "timestamp": "2026-07-22T07:20:09.286Z",
+    "relativeTime": "Just now",
+    "title": "One-Click Reset Filters Button",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added one-click reset active filters button next to search box in Progress Hub web dashboard.",
+    "highlights": [
+      "Reset Filters UI Button",
+      "Clear search query and active category filters",
+      "100% test pass rate across 124 tests and 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvr5w7a",
+    "timestamp": "2026-07-22T07:20:09.286Z",
+    "relativeTime": "Just now",
+    "title": "One-Click Reset Filters Button",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added one-click reset active filters button next to search box in Progress Hub web dashboard.",
+    "highlights": [
+      "Reset Filters UI Button",
+      "Clear search query and active category filters",
+      "100% test pass rate across 124 tests and 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvr4eu0",
     "timestamp": "2026-07-22T07:19:00.120Z",
     "relativeTime": "Just now",
