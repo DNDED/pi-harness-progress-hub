@@ -18,7 +18,8 @@ import {
   Download,
   FileText,
   Bot,
-  Gauge
+  Gauge,
+  BarChart3
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -56,6 +57,7 @@ export default function App() {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
+  const [showAnalytics, setShowAnalytics] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
 
@@ -116,6 +118,13 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  const categoryCounts = categories.slice(1).reduce((acc, cat) => {
+    acc[cat] = updates.filter(u => u.category === cat).length;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const maxCategoryCount = Math.max(1, ...Object.values(categoryCounts));
+
   const filteredUpdates = updates.filter((item) => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     const matchesQuery = searchQuery === '' ||
@@ -153,6 +162,13 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowAnalytics(!showAnalytics)}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 rounded-lg text-xs font-medium border border-indigo-500/30 transition flex items-center gap-1.5"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-indigo-400" />
+              <span>{showAnalytics ? 'Hide Analytics' : 'Analytics'}</span>
+            </button>
             <button
               onClick={() => setShowSubagents(!showSubagents)}
               className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded-lg text-xs font-medium border border-cyan-500/30 transition flex items-center gap-1.5"
@@ -200,6 +216,41 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Analytics Breakdown Card */}
+        {showAnalytics && (
+          <div className="p-6 bg-slate-900/90 border border-indigo-500/30 rounded-3xl shadow-2xl space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-indigo-400" />
+                <h2 className="text-lg font-bold text-slate-100">Progress Velocity & Category Breakdown</h2>
+              </div>
+              <span className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-md border border-indigo-500/20">
+                Live Distribution
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {Object.entries(categoryCounts).map(([cat, count]) => {
+                const percentage = Math.round((count / maxCategoryCount) * 100);
+                return (
+                  <div key={cat} className="space-y-1.5">
+                    <div className="flex justify-between text-xs font-mono text-slate-300">
+                      <span>{cat}</span>
+                      <span className="text-cyan-400 font-bold">{count} updates</span>
+                    </div>
+                    <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
+                      <div
+                        className="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(5, percentage)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Subagents Matrix Drawer */}
         {showSubagents && (
           <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
@@ -293,7 +344,7 @@ export default function App() {
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-amber500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
               <span>EXPORTER READY</span>
               <Sparkles className="w-4 h-4 text-amber-400" />
