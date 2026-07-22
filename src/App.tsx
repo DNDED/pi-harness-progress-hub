@@ -168,6 +168,7 @@ export default function App() {
   const [commandQuery, setCommandQuery] = useState<string>('');
   const [commandSelectedIndex, setCommandSelectedIndex] = useState<number>(0);
   const [selectedSubagentLog, setSelectedSubagentLog] = useState<SubagentLogData | null>(null);
+  const [subagentLogFilter, setSubagentLogFilter] = useState<string>('');
   const [selectedSentinelLog, setSelectedSentinelLog] = useState<SentinelLogData | null>(null);
   const [sentinelLogFilter, setSentinelLogFilter] = useState<string>('');
   const [copiedLog, setCopiedLog] = useState<boolean>(false);
@@ -2104,20 +2105,43 @@ export default function App() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                   <span>TERMINAL STDOUT / STDERR STREAM</span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(selectedSubagentLog.stdout);
-                      setCopiedLog(true);
-                      setTimeout(() => setCopiedLog(false), 2000);
-                    }}
-                    className="px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
-                  >
-                    {copiedLog ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-cyan-400" />}
-                    <span>{copiedLog ? 'Copied Log' : 'Copy Log'}</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <Search className="w-3 h-3 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+                      <input
+                        type="text"
+                        placeholder="Filter stdout..."
+                        value={subagentLogFilter}
+                        onChange={(e) => setSubagentLogFilter(e.target.value)}
+                        className="pl-7 pr-5 py-0.5 bg-slate-950 border border-slate-800 rounded text-[10px] text-slate-200 focus:outline-none focus:border-cyan-500 transition w-32"
+                      />
+                      {subagentLogFilter && (
+                        <button
+                          onClick={() => setSubagentLogFilter('')}
+                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(selectedSubagentLog.stdout);
+                        setCopiedLog(true);
+                        setTimeout(() => setCopiedLog(false), 2000);
+                      }}
+                      className="px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                    >
+                      {copiedLog ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-cyan-400" />}
+                      <span>{copiedLog ? 'Copied Log' : 'Copy Log'}</span>
+                    </button>
+                  </div>
                 </div>
                 <pre className="p-4 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs text-emerald-400 overflow-x-auto max-h-56 scrollbar-none leading-relaxed">
-                  {selectedSubagentLog.stdout}
+                  {selectedSubagentLog.stdout
+                    .split('\n')
+                    .filter(line => !subagentLogFilter || line.toLowerCase().includes(subagentLogFilter.toLowerCase()))
+                    .join('\n')}
                 </pre>
               </div>
 
