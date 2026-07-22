@@ -19,10 +19,12 @@ import {
   FileText,
   Bot,
   Gauge,
-  BarChart3
+  BarChart3,
+  Layers
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
+import initialSentinels from './data/sentinels.json';
 import { ProgressVideo, VideoUpdateItem } from './remotion/ProgressVideo';
 
 interface UpdateItem {
@@ -49,24 +51,35 @@ interface SubagentItem {
   task: string;
 }
 
+interface SentinelItem {
+  id: string;
+  name: string;
+  category: string;
+  status: string;
+  speedMs: number;
+}
+
 export default function App() {
   const [updates, setUpdates] = useState<UpdateItem[]>((initialUpdates as unknown) as UpdateItem[]);
   const [subagents, setSubagents] = useState<SubagentItem[]>((initialSubagents as unknown) as SubagentItem[]);
+  const [sentinels, setSentinels] = useState<SentinelItem[]>((initialSentinels as unknown) as SentinelItem[]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showSubagents, setShowSubagents] = useState<boolean>(false);
   const [showAnalytics, setShowAnalytics] = useState<boolean>(false);
+  const [showSentinels, setShowSentinels] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      const [resUpdates, resSubagents] = await Promise.all([
+      const [resUpdates, resSubagents, resSentinels] = await Promise.all([
         fetch('/api/updates?t=' + Date.now()),
-        fetch('/api/subagents?t=' + Date.now())
+        fetch('/api/subagents?t=' + Date.now()),
+        fetch('/api/sentinels?t=' + Date.now())
       ]);
       if (resUpdates.ok) {
         const data = await resUpdates.json();
@@ -75,6 +88,10 @@ export default function App() {
       if (resSubagents.ok) {
         const subData = await resSubagents.json();
         setSubagents(subData);
+      }
+      if (resSentinels.ok) {
+        const senData = await resSentinels.json();
+        setSentinels(senData);
       }
     } catch {
       // fallback
@@ -163,6 +180,13 @@ export default function App() {
 
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setShowSentinels(!showSentinels)}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-lg text-xs font-medium border border-emerald-500/30 transition flex items-center gap-1.5"
+            >
+              <Layers className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{showSentinels ? 'Hide Sentinels' : `Sentinels (${sentinels.length})`}</span>
+            </button>
+            <button
               onClick={() => setShowAnalytics(!showAnalytics)}
               className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 rounded-lg text-xs font-medium border border-indigo-500/30 transition flex items-center gap-1.5"
             >
@@ -216,6 +240,38 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Sentinels Health Drawer */}
+        {showSentinels && (
+          <div className="p-6 bg-slate-900/90 border border-emerald-500/30 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Layers className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-lg font-bold text-slate-100">Proactive Harness Sentinel Health Matrix</h2>
+              </div>
+              <span className="text-xs font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
+                {sentinels.length} / {sentinels.length} Active Sentinels (100% Pass)
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto pr-1">
+              {sentinels.map((s) => (
+                <div key={s.id} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-200 font-semibold truncate">{s.name}</span>
+                    <span className="text-emerald-400 text-[10px] font-bold px-1.5 py-0.5 bg-emerald-500/10 rounded">
+                      {s.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
+                    <span>{s.category}</span>
+                    <span>{s.speedMs}ms</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Analytics Breakdown Card */}
         {showAnalytics && (
           <div className="p-6 bg-slate-900/90 border border-indigo-500/30 rounded-3xl shadow-2xl space-y-6">
@@ -330,7 +386,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">64 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">66 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
@@ -344,7 +400,7 @@ export default function App() {
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-amber500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
               <span>EXPORTER READY</span>
               <Sparkles className="w-4 h-4 text-amber-400" />
