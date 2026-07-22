@@ -1863,11 +1863,28 @@ export default function App() {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {filteredSubagents.map((s) => (
+              {filteredSubagents.map((s) => {
+                const tokPerSec = s.durationMs > 0 && s.tokensUsed ? ((s.tokensUsed / s.durationMs) * 1000) : 0;
+                const effScore = s.status === 'Completed' && s.durationMs > 0 ? Math.min(99, Math.max(30, Math.round(Math.min(50, tokPerSec * 2) + Math.max(0, 50 - (s.durationMs / 400))))) : 95;
+                return (
                 <div key={s.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition space-y-2 group">
                   <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                     <span className="text-cyan-400 font-bold">{s.name}</span>
                     <div className="flex items-center gap-2">
+                      {s.status === 'Completed' && (
+                        <span
+                          className={`px-1.5 py-0.5 border rounded text-[10px] font-mono font-semibold ${
+                            effScore >= 80
+                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                              : effScore >= 60
+                              ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+                              : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          }`}
+                          title={`Performance Efficiency Score: ${effScore}/100`}
+                        >
+                          Eff: {effScore}/100
+                        </span>
+                      )}
                       <span className={`px-1.5 py-0.5 border rounded text-[10px] font-semibold flex items-center gap-1 ${
                         s.status === 'Running'
                           ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse font-bold'
@@ -2003,7 +2020,8 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           </div>
         )}
