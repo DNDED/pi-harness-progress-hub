@@ -40,7 +40,8 @@ import {
   List,
   LayoutGrid,
   Timer,
-  Command
+  Command,
+  Star
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -152,6 +153,23 @@ export default function App() {
   const [selectedSubagentLog, setSelectedSubagentLog] = useState<SubagentLogData | null>(null);
   const [copiedLog, setCopiedLog] = useState<boolean>(false);
   const [isReverifyingSentinels, setIsReverifyingSentinels] = useState<boolean>(false);
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('pi_bookmarked_updates');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [onlyBookmarkedFilter, setOnlyBookmarkedFilter] = useState<boolean>(false);
+
+  const toggleBookmark = (id: string) => {
+    setBookmarkedIds(prev => {
+      const next = prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id];
+      try { localStorage.setItem('pi_bookmarked_updates', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
 
   const prevUpdateCountRef = useRef<number>(updates.length);
 
@@ -187,6 +205,7 @@ export default function App() {
     setSelectedCategory('All');
     setSearchQuery('');
     setSelectedTag('');
+    setOnlyBookmarkedFilter(false);
     setSubagentStatusFilter('All');
     setSubagentSearchQuery('');
     setSentinelCategoryFilter('All');
@@ -428,13 +447,14 @@ export default function App() {
   const maxCategoryCount = Math.max(1, ...Object.values(categoryCounts));
 
   const filteredUpdates = updates.filter((item) => {
+    const matchesBookmarked = !onlyBookmarkedFilter || bookmarkedIds.includes(item.id);
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     const matchesTag = selectedTag === '' || item.highlights.some(h => h.toLowerCase().includes(selectedTag.toLowerCase()));
     const matchesQuery = searchQuery === '' ||
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.highlights.some(h => h.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesTag && matchesQuery;
+    return matchesBookmarked && matchesCategory && matchesTag && matchesQuery;
   });
 
   const filteredSubagents = subagents.filter(s => {
@@ -1293,6 +1313,18 @@ export default function App() {
         <div className="flex flex-col space-y-3 pb-4 border-b border-slate-800">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             <div className="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
+              <button
+                onClick={() => setOnlyBookmarkedFilter(!onlyBookmarkedFilter)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold font-mono transition whitespace-nowrap flex items-center gap-1.5 ${
+                  onlyBookmarkedFilter
+                    ? 'bg-amber-500 text-slate-950 font-bold shadow-lg shadow-amber-500/20'
+                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+                }`}
+                title="Filter to bookmarked milestone updates"
+              >
+                <Star className={`w-3.5 h-3.5 ${onlyBookmarkedFilter ? 'fill-slate-950 text-slate-950' : 'text-amber-400'}`} />
+                <span>Saved ({bookmarkedIds.length})</span>
+              </button>
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -1372,6 +1404,13 @@ export default function App() {
                   className="p-3 bg-slate-900/40 border border-slate-800/60 hover:border-slate-700/80 rounded-xl transition duration-200 flex items-center justify-between gap-4 font-mono text-xs group"
                 >
                   <div className="flex items-center gap-3 overflow-hidden">
+                    <button
+                      onClick={() => toggleBookmark(item.id)}
+                      className="p-1 rounded hover:bg-slate-800 transition shrink-0"
+                      title={bookmarkedIds.includes(item.id) ? "Remove bookmark" : "Bookmark milestone"}
+                    >
+                      <Star className={`w-3.5 h-3.5 ${bookmarkedIds.includes(item.id) ? 'fill-amber-400 text-amber-400' : 'text-slate-600 hover:text-slate-400'}`} />
+                    </button>
                     <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-cyan-400 border border-slate-700 shrink-0">
                       {item.category}
                     </span>
@@ -1393,6 +1432,13 @@ export default function App() {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/50 pb-3">
                     <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => toggleBookmark(item.id)}
+                        className="p-1 rounded-lg hover:bg-slate-800 transition"
+                        title={bookmarkedIds.includes(item.id) ? "Remove bookmark" : "Bookmark milestone"}
+                      >
+                        <Star className={`w-4 h-4 ${bookmarkedIds.includes(item.id) ? 'fill-amber-400 text-amber-400' : 'text-slate-600 hover:text-slate-400'}`} />
+                      </button>
                       <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-800 text-cyan-400 border border-slate-700">
                         {item.category}
                       </span>
