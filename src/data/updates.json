@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvt1k1a",
+    "timestamp": "2026-07-22T08:12:46.126Z",
+    "relativeTime": "Just now",
+    "title": "Timeline Milestone Edit/Delete REST API & Modal UI",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented PUT & DELETE /api/updates/item REST routes, edit/delete card action buttons, and interactive Edit Milestone Modal UI.",
+    "highlights": [
+      "Milestone Edit/Delete REST API & Modal UI",
+      "PUT & DELETE /api/updates/item REST routes",
+      "Enables inline editing and deleting of timeline progress milestones directly from the dashboard"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvt1k1a",
+    "timestamp": "2026-07-22T08:12:46.126Z",
+    "relativeTime": "Just now",
+    "title": "Timeline Milestone Edit/Delete REST API & Modal UI",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented PUT & DELETE /api/updates/item REST routes, edit/delete card action buttons, and interactive Edit Milestone Modal UI.",
+    "highlights": [
+      "Milestone Edit/Delete REST API & Modal UI",
+      "PUT & DELETE /api/updates/item REST routes",
+      "Enables inline editing and deleting of timeline progress milestones directly from the dashboard"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvsyfy1",
     "timestamp": "2026-07-22T08:10:20.857Z",
     "relativeTime": "Just now",
@@ -39,15 +75,14 @@
     "id": "upd-01",
     "timestamp": "2026-07-22T08:10:16.799Z",
     "relativeTime": "Just now",
-    "title": "Pi Progress Hub Server Initialized",
+    "title": "Pi Progress Hub Server & REST Engine Active",
     "category": "Core Runtime",
     "status": "Verified",
     "author": "pi-agent-harness",
-    "description": "Initialized Pi Progress Hub real-time telemetry server and static dashboard.",
+    "description": "Initialized Pi Progress Hub real-time telemetry server and static dashboard with PUT/DELETE support.",
     "highlights": [
       "Live server running on port 3050",
-      "REST API endpoints active",
-      "Atomic data writer enabled"
+      "PUT /api/updates/item enabled"
     ],
     "metrics": {
       "status": "Optimal"

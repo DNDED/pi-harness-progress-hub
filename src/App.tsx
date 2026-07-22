@@ -42,6 +42,7 @@ import {
   Timer,
   Command,
   Star,
+  Edit,
   Trash2
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
@@ -177,6 +178,67 @@ export default function App() {
     }
   });
   const [onlyBookmarkedFilter, setOnlyBookmarkedFilter] = useState<boolean>(false);
+
+  const [editingUpdate, setEditingUpdate] = useState<UpdateItem | null>(null);
+  const [editTitle, setEditTitle] = useState<string>('');
+  const [editCategory, setEditCategory] = useState<string>('');
+  const [editDescription, setEditDescription] = useState<string>('');
+  const [editHighlightsText, setEditHighlightsText] = useState<string>('');
+
+  const handleOpenEditUpdate = (item: UpdateItem) => {
+    setEditingUpdate(item);
+    setEditTitle(item.title);
+    setEditCategory(item.category);
+    setEditDescription(item.description);
+    setEditHighlightsText(item.highlights ? item.highlights.join('\n') : '');
+  };
+
+  const handleSaveEditedUpdate = async () => {
+    if (!editingUpdate) return;
+    const highlights = editHighlightsText
+      .split('\n')
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    try {
+      const res = await fetch('/api/updates/item', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingUpdate.id,
+          title: editTitle,
+          category: editCategory,
+          description: editDescription,
+          highlights
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUpdates(prev => prev.map(u => u.id === editingUpdate.id ? data.update : u));
+      }
+    } catch {
+      setUpdates(prev => prev.map(u => u.id === editingUpdate.id ? {
+        ...u,
+        title: editTitle,
+        category: editCategory,
+        description: editDescription,
+        highlights
+      } : u));
+    } finally {
+      setEditingUpdate(null);
+    }
+  };
+
+  const handleDeleteUpdateItem = async (id: string) => {
+    try {
+      const res = await fetch(`/api/updates/item?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setUpdates(prev => prev.filter(u => u.id !== id));
+      }
+    } catch {
+      setUpdates(prev => prev.filter(u => u.id !== id));
+    }
+  };
 
   const toggleBookmark = (id: string) => {
     setBookmarkedIds(prev => {
@@ -1648,6 +1710,20 @@ export default function App() {
                     <span>{item.author}</span>
                     <span>•</span>
                     <span>{item.relativeTime}</span>
+                    <button
+                      onClick={() => handleOpenEditUpdate(item)}
+                      className="p-1 text-slate-500 hover:text-cyan-300 transition"
+                      title="Edit milestone update"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteUpdateItem(item.id)}
+                      className="p-1 text-slate-500 hover:text-rose-400 transition"
+                      title="Delete milestone update"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -1681,6 +1757,20 @@ export default function App() {
                       </span>
                       <span>•</span>
                       <span className="text-slate-500">{item.author}</span>
+                      <button
+                        onClick={() => handleOpenEditUpdate(item)}
+                        className="p-1 text-slate-500 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/30 rounded transition"
+                        title="Edit milestone update"
+                      >
+                        <Edit className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUpdateItem(item.id)}
+                        className="p-1 text-slate-500 hover:text-rose-400 border border-slate-800 hover:border-rose-500/30 rounded transition"
+                        title="Delete milestone update"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
 
@@ -1978,6 +2068,91 @@ export default function App() {
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700 transition"
               >
                 Close Log
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Milestone Modal */}
+      {editingUpdate && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div
+            className="bg-slate-900 border border-cyan-500/40 rounded-3xl w-full max-w-lg shadow-2xl p-6 space-y-4 relative overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Edit className="w-5 h-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-slate-100">
+                  Edit Milestone: {editingUpdate.id}
+                </h2>
+              </div>
+              <button
+                onClick={() => setEditingUpdate(null)}
+                className="p-1 text-slate-400 hover:text-slate-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Title</label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Category</label>
+                <select
+                  value={editCategory}
+                  onChange={(e) => setEditCategory(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                >
+                  {categories.slice(1).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Description</label>
+                <textarea
+                  rows={3}
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Highlights (one per line)</label>
+                <textarea
+                  rows={3}
+                  value={editHighlightsText}
+                  onChange={(e) => setEditHighlightsText(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <button
+                onClick={() => setEditingUpdate(null)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveEditedUpdate}
+                className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold rounded-xl text-xs transition"
+              >
+                Save Changes
               </button>
             </div>
           </div>

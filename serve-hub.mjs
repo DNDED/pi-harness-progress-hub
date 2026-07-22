@@ -31,7 +31,7 @@ const MIME_TYPES = {
 const server = http.createServer((req, res) => {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -62,6 +62,60 @@ const server = http.createServer((req, res) => {
       fs.writeFileSync(UPDATES_FILE, JSON.stringify(defaultUpdates, null, 2), 'utf-8');
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: true, message: 'Timeline updates reset', updates: defaultUpdates }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
+  // PUT /api/updates/item - Edit milestone
+  if (req.method === 'PUT' && url.pathname === '/api/updates/item') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        let updates = [];
+        if (fs.existsSync(UPDATES_FILE)) {
+          updates = JSON.parse(fs.readFileSync(UPDATES_FILE, 'utf-8'));
+        }
+        const idx = updates.findIndex(u => u.id === payload.id);
+        if (idx !== -1) {
+          updates[idx] = {
+            ...updates[idx],
+            title: payload.title || updates[idx].title,
+            category: payload.category || updates[idx].category,
+            description: payload.description || updates[idx].description,
+            highlights: Array.isArray(payload.highlights) ? payload.highlights : updates[idx].highlights
+          };
+          fs.writeFileSync(UPDATES_FILE, JSON.stringify(updates, null, 2), 'utf-8');
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, update: updates[idx], updates }));
+        } else {
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Update item not found' }));
+        }
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // DELETE /api/updates/item - Delete single milestone
+  if (req.method === 'DELETE' && url.pathname === '/api/updates/item') {
+    const id = url.searchParams.get('id');
+    try {
+      let updates = [];
+      if (fs.existsSync(UPDATES_FILE)) {
+        updates = JSON.parse(fs.readFileSync(UPDATES_FILE, 'utf-8'));
+      }
+      const filtered = updates.filter(u => u.id !== id);
+      fs.writeFileSync(UPDATES_FILE, JSON.stringify(filtered, null, 2), 'utf-8');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, updates: filtered }));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: err.message }));
