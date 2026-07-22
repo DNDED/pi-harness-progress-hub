@@ -1410,6 +1410,44 @@ export default function App() {
                 </div>
               </div>
             )}
+
+            {/* Subagent Duration vs Tokens Efficiency Scatter Plot */}
+            {subagents.length > 0 && (
+              <div className="pt-4 border-t border-slate-800 space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between text-slate-300">
+                  <span className="font-bold flex items-center gap-1.5 text-indigo-300">
+                    <Activity className="w-4 h-4 text-indigo-400" /> Subagent Latency vs Token Density Scatter Plot
+                  </span>
+                  <span className="text-[10px] text-slate-500">DURATION (X) vs TOKENS (Y)</span>
+                </div>
+                <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                  <div className="relative h-32 w-full border-b border-l border-slate-800 flex items-end p-2 gap-2">
+                    {subagents.map((s, idx) => {
+                      const maxTok = Math.max(...subagents.map(i => i.tokensUsed || 0), 1);
+                      const maxDur = Math.max(...subagents.map(i => i.durationMs || 0), 1);
+                      const leftPercent = Math.min(95, Math.max(5, (s.durationMs / maxDur) * 100));
+                      const bottomPercent = Math.min(90, Math.max(10, ((s.tokensUsed || 0) / maxTok) * 100));
+
+                      return (
+                        <div
+                          key={s.id || idx}
+                          className="absolute w-3.5 h-3.5 rounded-full border border-cyan-400/60 bg-cyan-500/30 hover:bg-cyan-400 hover:scale-125 transition cursor-pointer flex items-center justify-center group"
+                          style={{ left: `${leftPercent}%`, bottom: `${bottomPercent}%` }}
+                          title={`[${s.model}] ${s.name}: ${s.durationMs}ms | ${s.tokensUsed || 0} tokens\nTask: ${s.task}`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-300"></span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex justify-between text-[10px] text-slate-500">
+                    <span>Fast (&lt;1s)</span>
+                    <span>Subagent Execution Latency (ms)</span>
+                    <span>Slow ({maxSubagentDuration}ms)</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
