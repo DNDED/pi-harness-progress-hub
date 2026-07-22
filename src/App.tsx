@@ -18,10 +18,10 @@ import {
   Download,
   FileText,
   Bot,
-  Gauge,
   BarChart3,
   Layers,
-  Tag
+  Tag,
+  BookOpen
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -405,17 +405,17 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">68 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">70 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
             <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-xl group-hover:bg-indigo-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
-              <span>SUBAGENTS ACTIVE</span>
-              <Gauge className="w-4 h-4 text-indigo-400" />
+              <span>CONTINUITY VAULT</span>
+              <BookOpen className="w-4 h-4 text-indigo-400" />
             </div>
-            <div className="text-3xl font-extrabold font-mono text-indigo-300">{subagents.length}</div>
-            <div className="mt-2 text-xs text-slate-400">Subagent execution instances</div>
+            <div className="text-3xl font-extrabold font-mono text-indigo-300">Synchronized</div>
+            <div className="mt-2 text-xs text-slate-400">Obsidian PI Vault Active</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
