@@ -39,7 +39,8 @@ import {
   TrendingUp,
   List,
   LayoutGrid,
-  Timer
+  Timer,
+  Command
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -131,6 +132,9 @@ export default function App() {
   const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
   const [activeTheme, setActiveTheme] = useState<'slate' | 'cyber' | 'obsidian'>('slate');
   const [compactTimeline, setCompactTimeline] = useState<boolean>(false);
+  const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
+  const [commandQuery, setCommandQuery] = useState<string>('');
+  const [commandSelectedIndex, setCommandSelectedIndex] = useState<number>(0);
 
   const prevUpdateCountRef = useRef<number>(updates.length);
 
@@ -246,8 +250,20 @@ export default function App() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(prev => !prev);
+        setCommandQuery('');
+        setCommandSelectedIndex(0);
+        return;
+      }
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if (e.key === '?') {
+      if (e.key === '/') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+        setCommandQuery('');
+        setCommandSelectedIndex(0);
+      } else if (e.key === '?') {
         setShowHotkeyModal(prev => !prev);
       } else if (e.key.toLowerCase() === 'r') {
         handleRefresh();
@@ -304,6 +320,29 @@ export default function App() {
     a.click();
     URL.revokeObjectURL(url);
   };
+
+  const commandActions = [
+    { id: 'refresh', label: 'Trigger Live Data Refresh', category: 'General', hotkey: 'R', icon: RefreshCw, run: () => handleRefresh() },
+    { id: 'subagents', label: 'Toggle Subagents Execution Telemetry', category: 'Telemetry', hotkey: 'B', icon: Bot, run: () => setShowSubagents(prev => !prev) },
+    { id: 'sentinels', label: 'Toggle Sentinel Health Diagnostic Matrix', category: 'Diagnostics', hotkey: 'S', icon: Layers, run: () => setShowSentinels(prev => !prev) },
+    { id: 'health', label: 'Toggle Live Harness System Health', category: 'Diagnostics', hotkey: 'H', icon: HeartPulse, run: () => setShowHealth(prev => !prev) },
+    { id: 'dispatch', label: 'Dispatch New Subagent Task', category: 'Actions', hotkey: '+', icon: Plus, run: () => setShowDispatchModal(true) },
+    { id: 'video', label: 'Toggle Remotion Progress Reel Video', category: 'Media', hotkey: 'V', icon: Video, run: () => setShowVideo(prev => !prev) },
+    { id: 'analytics', label: 'Toggle Progress Velocity Analytics', category: 'Analytics', hotkey: 'A', icon: BarChart3, run: () => setShowAnalytics(prev => !prev) },
+    { id: 'theme', label: 'Switch Visual Theme (Slate / Cyber / Obsidian)', category: 'UI', hotkey: 'T', icon: Palette, run: () => setActiveTheme(prev => prev === 'slate' ? 'cyber' : prev === 'cyber' ? 'obsidian' : 'slate') },
+    { id: 'polling', label: 'Toggle Live 3s Polling Auto-Refresh', category: 'Settings', hotkey: 'P', icon: Radio, run: () => setAutoPolling(prev => !prev) },
+    { id: 'compact', label: 'Toggle Compact / Expanded View Mode', category: 'UI', hotkey: 'C', icon: List, run: () => setCompactTimeline(prev => !prev) },
+    { id: 'badge', label: 'View SVG Status Badge Embed Code', category: 'Integrations', hotkey: '', icon: Code2, run: () => setShowBadgeModal(true) },
+    { id: 'audio', label: 'Toggle Web Audio Milestone Chimes', category: 'Settings', hotkey: 'M', icon: Volume2, run: () => setAudioEnabled(prev => !prev) },
+    { id: 'reset', label: 'Clear All Active Search & Category Filters', category: 'General', hotkey: '', icon: X, run: () => resetAllFilters() },
+    { id: 'export-md', label: 'Download Markdown Changelog File', category: 'Export', hotkey: '', icon: Download, run: () => exportMarkdownLog() },
+    { id: 'export-json', label: 'Download Log as JSON File', category: 'Export', hotkey: '', icon: FileJson, run: () => exportJsonLog() },
+  ];
+
+  const filteredCommandActions = commandActions.filter(cmd =>
+    cmd.label.toLowerCase().includes(commandQuery.toLowerCase()) ||
+    cmd.category.toLowerCase().includes(commandQuery.toLowerCase())
+  );
 
   const badgeMarkdown = `![pi-harness health](http://localhost:3050/api/status/badge)`;
 
@@ -456,6 +495,14 @@ export default function App() {
                   title="Keyboard Hotkeys (?)"
                 >
                   <Keyboard className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => { setShowCommandPalette(true); setCommandQuery(''); setCommandSelectedIndex(0); }}
+                  className="px-2 py-0.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 rounded-md text-xs font-semibold flex items-center gap-1 transition"
+                  title="Command Palette (Ctrl+K or /)"
+                >
+                  <Command className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="hidden sm:inline font-mono">Ctrl+K</span>
                 </button>
               </div>
               <p className="text-xs text-slate-400 font-mono">
@@ -1215,6 +1262,102 @@ export default function App() {
           )}
         </div>
       </main>
+
+      {/* Command Palette Modal */}
+        {showCommandPalette && (
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4">
+            <div
+              className="bg-slate-900 border border-cyan-500/40 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col space-y-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-slate-800 flex items-center gap-3 bg-slate-950/50">
+                <Command className="w-5 h-5 text-cyan-400 shrink-0" />
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Type a command or search actions... (Ctrl+K or Esc to close)"
+                  value={commandQuery}
+                  onChange={(e) => {
+                    setCommandQuery(e.target.value);
+                    setCommandSelectedIndex(0);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setShowCommandPalette(false);
+                    } else if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      setCommandSelectedIndex(prev => (prev + 1) % (filteredCommandActions.length || 1));
+                    } else if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      setCommandSelectedIndex(prev => (prev - 1 + (filteredCommandActions.length || 1)) % (filteredCommandActions.length || 1));
+                    } else if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (filteredCommandActions[commandSelectedIndex]) {
+                        filteredCommandActions[commandSelectedIndex].run();
+                        setShowCommandPalette(false);
+                      }
+                    }
+                  }}
+                  className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none font-mono"
+                />
+                <button
+                  onClick={() => setShowCommandPalette(false)}
+                  className="text-xs text-slate-500 hover:text-slate-300 font-mono"
+                >
+                  ESC
+                </button>
+              </div>
+
+              <div className="max-h-80 overflow-y-auto p-2 space-y-1 font-mono text-xs">
+                {filteredCommandActions.length === 0 ? (
+                  <div className="p-4 text-center text-slate-500">
+                    No matching commands found for "{commandQuery}"
+                  </div>
+                ) : (
+                  filteredCommandActions.map((cmd, idx) => {
+                    const Icon = cmd.icon;
+                    const isSelected = idx === commandSelectedIndex;
+                    return (
+                      <button
+                        key={cmd.id}
+                        onClick={() => {
+                          cmd.run();
+                          setShowCommandPalette(false);
+                        }}
+                        onMouseEnter={() => setCommandSelectedIndex(idx)}
+                        className={`w-full p-3 rounded-xl flex items-center justify-between transition text-left ${
+                          isSelected
+                            ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-200'
+                            : 'hover:bg-slate-800/60 text-slate-300 border border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon className={`w-4 h-4 ${isSelected ? 'text-cyan-400' : 'text-slate-400'}`} />
+                          <span className="font-semibold">{cmd.label}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400 border border-slate-700">
+                            {cmd.category}
+                          </span>
+                          {cmd.hotkey && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] bg-cyan-500/10 text-cyan-400 font-bold border border-cyan-500/20">
+                              {cmd.hotkey}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                <span>Use ↑ ↓ to navigate, Enter to select</span>
+                <span>Ctrl+K or / to open</span>
+              </div>
+            </div>
+          </div>
+        )}
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 font-mono">

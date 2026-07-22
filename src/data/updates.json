@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrxcds",
+    "timestamp": "2026-07-22T07:41:29.968Z",
+    "relativeTime": "Just now",
+    "title": "Global Command Palette (Ctrl+K / Cmd+K)",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Designed and integrated a global Command Palette with fuzzy action search, arrow navigation, keyboard hotkeys, and one-click execution in pi-progress-hub.",
+    "highlights": [
+      "Global Command Palette & Keyboard Search",
+      "Ctrl+K & / Hotkey Command Palette",
+      "15 instant actions with keyboard navigation & category pills"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrxcds",
+    "timestamp": "2026-07-22T07:41:29.968Z",
+    "relativeTime": "Just now",
+    "title": "Global Command Palette (Ctrl+K / Cmd+K)",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Designed and integrated a global Command Palette with fuzzy action search, arrow navigation, keyboard hotkeys, and one-click execution in pi-progress-hub.",
+    "highlights": [
+      "Global Command Palette & Keyboard Search",
+      "Ctrl+K & / Hotkey Command Palette",
+      "15 instant actions with keyboard navigation & category pills"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvrv2xx",
     "timestamp": "2026-07-22T07:39:44.421Z",
     "relativeTime": "Just now",
