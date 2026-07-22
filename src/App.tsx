@@ -1255,19 +1255,30 @@ export default function App() {
                   )}
                 </div>
                 <div className="flex items-center gap-1 overflow-x-auto max-w-full">
-                  {sentinelCategories.map((sc) => (
-                    <button
-                      key={sc}
-                      onClick={() => setSentinelCategoryFilter(sc)}
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold transition whitespace-nowrap ${
-                        sentinelCategoryFilter === sc
-                          ? 'bg-emerald-500 text-slate-950 font-bold'
-                          : 'bg-slate-800 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      {sc === 'All' ? `All (${sentinels.length})` : `${sc} (${sentinelCategoryCounts[sc] || 0})`}
-                    </button>
-                  ))}
+                  {sentinelCategories.map((sc) => {
+                    const count = sc === 'All' ? sentinels.length : (sentinelCategoryCounts[sc] || 0);
+
+                    return (
+                      <button
+                        key={sc}
+                        onClick={() => setSentinelCategoryFilter(sc)}
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-semibold transition whitespace-nowrap flex items-center gap-1 ${
+                          sentinelCategoryFilter === sc
+                            ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
+                            : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700/60'
+                        }`}
+                      >
+                        <span>{sc}</span>
+                        <span className={`px-1 py-0.2 rounded-full text-[9px] ${
+                          sentinelCategoryFilter === sc
+                            ? 'bg-slate-950/20 text-slate-950 font-bold'
+                            : 'bg-slate-900 text-slate-500'
+                        }`}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
