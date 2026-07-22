@@ -112,6 +112,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [subagentStatusFilter, setSubagentStatusFilter] = useState<string>('All');
+  const [subagentSearchQuery, setSubagentSearchQuery] = useState<string>('');
   const [sentinelCategoryFilter, setSentinelCategoryFilter] = useState<string>('All');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [autoPolling, setAutoPolling] = useState<boolean>(true);
@@ -165,6 +166,7 @@ export default function App() {
     setSearchQuery('');
     setSelectedTag('');
     setSubagentStatusFilter('All');
+    setSubagentSearchQuery('');
     setSentinelCategoryFilter('All');
   };
 
@@ -326,7 +328,14 @@ export default function App() {
     return matchesCategory && matchesTag && matchesQuery;
   });
 
-  const filteredSubagents = subagents.filter(s => subagentStatusFilter === 'All' || s.status.toLowerCase() === subagentStatusFilter.toLowerCase());
+  const filteredSubagents = subagents.filter(s => {
+    const matchesStatus = subagentStatusFilter === 'All' || s.status.toLowerCase() === subagentStatusFilter.toLowerCase();
+    const matchesQuery = subagentSearchQuery === '' ||
+      s.name.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
+      s.model.toLowerCase().includes(subagentSearchQuery.toLowerCase()) ||
+      s.task.toLowerCase().includes(subagentSearchQuery.toLowerCase());
+    return matchesStatus && matchesQuery;
+  });
 
   const sentinelCategories = ['All', ...Array.from(new Set(sentinels.map(s => s.category)))];
   const filteredSentinels = sentinels.filter(s => sentinelCategoryFilter === 'All' || s.category === sentinelCategoryFilter);
@@ -829,7 +838,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Subagents Matrix Drawer with Dispatch Button & Duration Chart */}
+        {/* Subagents Matrix Drawer with Inline Search & Dispatch Button */}
         {showSubagents && (
           <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -837,7 +846,25 @@ export default function App() {
                 <Bot className="w-5 h-5 text-cyan-400" />
                 <h2 className="text-lg font-bold text-slate-100">Live Subagent Execution Telemetry</h2>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    type="text"
+                    placeholder="Search subagents..."
+                    value={subagentSearchQuery}
+                    onChange={(e) => setSubagentSearchQuery(e.target.value)}
+                    className="pl-8 pr-6 py-1 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition w-36 sm:w-48"
+                  />
+                  {subagentSearchQuery && (
+                    <button
+                      onClick={() => setSubagentSearchQuery('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
                 {subagentStatusFilter !== 'All' && (
                   <button
                     onClick={() => setSubagentStatusFilter('All')}

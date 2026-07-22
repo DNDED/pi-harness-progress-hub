@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrnhpo",
+    "timestamp": "2026-07-22T07:33:50.316Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Inline Search UI",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added real-time subagent task, name, and model search bar inside the Subagent Telemetry drawer.",
+    "highlights": [
+      "Subagent Telemetry Search UI",
+      "Subagent drawer search bar",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrnhpo",
+    "timestamp": "2026-07-22T07:33:50.316Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Inline Search UI",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added real-time subagent task, name, and model search bar inside the Subagent Telemetry drawer.",
+    "highlights": [
+      "Subagent Telemetry Search UI",
+      "Subagent drawer search bar",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvrlpvr",
     "timestamp": "2026-07-22T07:32:27.591Z",
     "relativeTime": "Just now",
