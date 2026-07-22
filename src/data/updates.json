@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvsw6vo",
+    "timestamp": "2026-07-22T08:08:35.796Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Flush All REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented DELETE /api/subagents/all REST route and Flush All button in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Flush All REST API & UI",
+      "DELETE /api/subagents/all REST route",
+      "Enables 1-click purging of all subagent telemetry records"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvsw6vo",
+    "timestamp": "2026-07-22T08:08:35.796Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Flush All REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented DELETE /api/subagents/all REST route and Flush All button in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Flush All REST API & UI",
+      "DELETE /api/subagents/all REST route",
+      "Enables 1-click purging of all subagent telemetry records"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvsu5k8",
     "timestamp": "2026-07-22T08:07:00.776Z",
     "relativeTime": "Just now",

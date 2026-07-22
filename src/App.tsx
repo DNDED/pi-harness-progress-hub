@@ -365,6 +365,17 @@ export default function App() {
     }
   };
 
+  const handleFlushAllSubagents = async () => {
+    try {
+      const res = await fetch('/api/subagents/all', { method: 'DELETE' });
+      if (res.ok) {
+        setSubagents([]);
+      }
+    } catch {
+      setSubagents([]);
+    }
+  };
+
   const handleRunBenchmark = async () => {
     setIsRunningBenchmark(true);
     try {
@@ -1245,6 +1256,14 @@ export default function App() {
                 >
                   <Trash2 className="w-3.5 h-3.5 text-rose-400" />
                   <span>Reset History</span>
+                </button>
+                <button
+                  onClick={handleFlushAllSubagents}
+                  className="px-2.5 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-200 border border-red-500/40 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                  title="Purge all subagent telemetry records"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                  <span>Flush All</span>
                 </button>
                 {['All', 'Completed', 'Running'].map((st) => (
                   <button
