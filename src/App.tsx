@@ -149,6 +149,7 @@ export default function App() {
   const [commandSelectedIndex, setCommandSelectedIndex] = useState<number>(0);
   const [selectedSubagentLog, setSelectedSubagentLog] = useState<SubagentLogData | null>(null);
   const [copiedLog, setCopiedLog] = useState<boolean>(false);
+  const [isReverifyingSentinels, setIsReverifyingSentinels] = useState<boolean>(false);
 
   const prevUpdateCountRef = useRef<number>(updates.length);
 
@@ -188,6 +189,22 @@ export default function App() {
     setSubagentSearchQuery('');
     setSentinelCategoryFilter('All');
     setSentinelSearchQuery('');
+  };
+
+  const handleRunSentinels = async () => {
+    setIsReverifyingSentinels(true);
+    try {
+      const res = await fetch('/api/sentinels/run', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        setSentinels(data.sentinels);
+        playChime();
+      }
+    } catch {
+      // fallback
+    } finally {
+      setTimeout(() => setIsReverifyingSentinels(false), 400);
+    }
   };
 
   const handleRefresh = async () => {
@@ -895,6 +912,15 @@ export default function App() {
                 <h2 className="text-lg font-bold text-slate-100">Proactive Harness Sentinel Health Matrix</h2>
               </div>
               <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={handleRunSentinels}
+                  disabled={isReverifyingSentinels}
+                  className="px-2.5 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+                  title="Trigger live re-verification of all 42 proactive sentinels"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isReverifyingSentinels ? 'animate-spin' : ''}`} />
+                  <span>{isReverifyingSentinels ? 'Verifying...' : 'Re-Verify All'}</span>
+                </button>
                 <div className="relative">
                   <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input

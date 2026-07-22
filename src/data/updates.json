@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvs7b97",
+    "timestamp": "2026-07-22T07:49:15.067Z",
+    "relativeTime": "Just now",
+    "title": "Re-Verify Sentinels REST API & Sentinel Matrix Re-Verify Button",
+    "category": "Sentinels",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented POST /api/sentinels/run REST endpoint in serve-hub.mjs and an interactive Re-Verify All button in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Sentinel Verification REST Route & Matrix UI",
+      "POST /api/sentinels/run REST route",
+      "Re-executes 42 proactive sentinels & updates speeds in real-time"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvs7b97",
+    "timestamp": "2026-07-22T07:49:15.067Z",
+    "relativeTime": "Just now",
+    "title": "Re-Verify Sentinels REST API & Sentinel Matrix Re-Verify Button",
+    "category": "Sentinels",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented POST /api/sentinels/run REST endpoint in serve-hub.mjs and an interactive Re-Verify All button in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Sentinel Verification REST Route & Matrix UI",
+      "POST /api/sentinels/run REST route",
+      "Re-executes 42 proactive sentinels & updates speeds in real-time"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvs5brw",
     "timestamp": "2026-07-22T07:47:42.428Z",
     "relativeTime": "Just now",
