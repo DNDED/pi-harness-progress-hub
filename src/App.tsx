@@ -35,11 +35,13 @@ import {
   X,
   Plus,
   Radio,
-  FileSpreadsheet
+  FileSpreadsheet,
+  TrendingUp
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
 import initialSentinels from './data/sentinels.json';
+import initialHealthHistory from './data/health-history.json';
 import { ProgressVideo, VideoUpdateItem } from './remotion/ProgressVideo';
 
 interface UpdateItem {
@@ -87,10 +89,21 @@ interface HealthData {
   timestamp: string;
 }
 
+interface HealthSnapshotItem {
+  timestamp: string;
+  uptimeSec: number;
+  memoryMb: number;
+  activeSentinels: number;
+  passRate: string;
+  totalUpdates: number;
+  totalSubagents: number;
+}
+
 export default function App() {
   const [updates, setUpdates] = useState<UpdateItem[]>((initialUpdates as unknown) as UpdateItem[]);
   const [subagents, setSubagents] = useState<SubagentItem[]>((initialSubagents as unknown) as SubagentItem[]);
   const [sentinels, setSentinels] = useState<SentinelItem[]>((initialSentinels as unknown) as SentinelItem[]);
+  const [healthHistory, setHealthHistory] = useState<HealthSnapshotItem[]>((initialHealthHistory as unknown) as HealthSnapshotItem[]);
   const [health, setHealth] = useState<HealthData | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -154,11 +167,12 @@ export default function App() {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      const [resUpdates, resSubagents, resSentinels, resHealth] = await Promise.all([
+      const [resUpdates, resSubagents, resSentinels, resHealth, resHistory] = await Promise.all([
         fetch('/api/updates?t=' + Date.now()),
         fetch('/api/subagents?t=' + Date.now()),
         fetch('/api/sentinels?t=' + Date.now()),
-        fetch('/api/health?t=' + Date.now())
+        fetch('/api/health?t=' + Date.now()),
+        fetch('/api/health/history?t=' + Date.now())
       ]);
       if (resUpdates.ok) {
         const newUpdates = await resUpdates.json();
@@ -171,6 +185,7 @@ export default function App() {
       if (resSubagents.ok) setSubagents(await resSubagents.json());
       if (resSentinels.ok) setSentinels(await resSentinels.json());
       if (resHealth.ok) setHealth(await resHealth.json());
+      if (resHistory.ok) setHealthHistory(await resHistory.json());
     } catch {
       // fallback
     } finally {
@@ -671,6 +686,31 @@ export default function App() {
                 <div className="text-amber-300 font-bold text-sm mt-1">{health.passRate} (42 Sentinels)</div>
               </div>
             </div>
+
+            {/* Health Snapshot Trend Chart */}
+            {healthHistory.length > 0 && (
+              <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span className="flex items-center gap-1.5 font-bold text-slate-200">
+                    <TrendingUp className="w-3.5 h-3.5 text-cyan-400" /> Memory Usage Trend ({healthHistory.length} Snapshots)
+                  </span>
+                  <span className="text-cyan-300">Latest: {healthHistory[0]?.memoryMb} MB</span>
+                </div>
+                <div className="flex items-end gap-1 h-12 pt-2 border-t border-slate-900">
+                  {healthHistory.slice(0, 30).reverse().map((item, idx) => {
+                    const heightPercent = Math.min(100, Math.max(15, (item.memoryMb / 128) * 100));
+                    return (
+                      <div
+                        key={idx}
+                        className="flex-1 bg-gradient-to-t from-cyan-600 to-sky-400 rounded-t hover:from-cyan-500 hover:to-sky-300 transition"
+                        style={{ height: `${heightPercent}%` }}
+                        title={`Timestamp: ${new Date(item.timestamp).toLocaleTimeString()} | Memory: ${item.memoryMb} MB | Uptime: ${item.uptimeSec}s`}
+                      ></div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -867,7 +907,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">125 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">126 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
