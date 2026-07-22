@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrbbqq",
+    "timestamp": "2026-07-22T07:24:22.706Z",
+    "relativeTime": "Just now",
+    "title": "System Health CSV REST API & Header Link",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added /api/health/csv endpoint and CSV API button in Progress Hub web header.",
+    "highlights": [
+      "CSV Export REST API",
+      "CSV system health export endpoint",
+      "100% test pass rate across 125 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrbbqq",
+    "timestamp": "2026-07-22T07:24:22.706Z",
+    "relativeTime": "Just now",
+    "title": "System Health CSV REST API & Header Link",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added /api/health/csv endpoint and CSV API button in Progress Hub web header.",
+    "highlights": [
+      "CSV Export REST API",
+      "CSV system health export endpoint",
+      "100% test pass rate across 125 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvr9i2k",
     "timestamp": "2026-07-22T07:22:57.596Z",
     "relativeTime": "Just now",

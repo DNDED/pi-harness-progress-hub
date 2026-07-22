@@ -34,7 +34,8 @@ import {
   Palette,
   X,
   Plus,
-  Radio
+  Radio,
+  FileSpreadsheet
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -368,6 +369,16 @@ export default function App() {
                 >
                   <FileJson className="w-3 h-3 text-cyan-400" />
                   JSON API
+                </a>
+                <a
+                  href="/api/health/csv"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 rounded-full flex items-center gap-1 transition"
+                  title="Download System Health CSV"
+                >
+                  <FileSpreadsheet className="w-3 h-3 text-emerald-400" />
+                  CSV API
                 </a>
                 <button
                   onClick={() => setAutoPolling(!autoPolling)}
