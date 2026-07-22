@@ -1112,6 +1112,15 @@ export default function App() {
                   <Plus className="w-3.5 h-3.5" />
                   <span>Dispatch Task</span>
                 </button>
+                <a
+                  href="/api/subagents/export?format=csv"
+                  download="pi-subagents-telemetry.csv"
+                  className="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                  title="Export subagent execution telemetry to CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Export CSV</span>
+                </a>
                 {['All', 'Completed', 'Running'].map((st) => (
                   <button
                     key={st}

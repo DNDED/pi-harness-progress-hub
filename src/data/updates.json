@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvsfom4",
+    "timestamp": "2026-07-22T07:55:45.628Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Export REST API & UI Link",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/subagents/export REST endpoint (CSV/JSON/MD) and Export CSV link in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Telemetry Export REST Route & UI Link",
+      "C:/Program Files/Git/api/subagents/export REST route",
+      "Enables 1-click download of subagent execution logs in CSV, JSON, or Markdown formats"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvsfom4",
+    "timestamp": "2026-07-22T07:55:45.628Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Export REST API & UI Link",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/subagents/export REST endpoint (CSV/JSON/MD) and Export CSV link in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Telemetry Export REST Route & UI Link",
+      "C:/Program Files/Git/api/subagents/export REST route",
+      "Enables 1-click download of subagent execution logs in CSV, JSON, or Markdown formats"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvsdzfr",
     "timestamp": "2026-07-22T07:54:26.344Z",
     "relativeTime": "Just now",

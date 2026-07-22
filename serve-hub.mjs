@@ -292,6 +292,58 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Subagent Telemetry Export Endpoint
+  if (url.pathname === '/api/subagents/export') {
+    const format = (url.searchParams.get('format') || 'json').toLowerCase();
+    let subagents = [];
+    try {
+      if (fs.existsSync(SUBAGENTS_FILE)) {
+        subagents = JSON.parse(fs.readFileSync(SUBAGENTS_FILE, 'utf-8'));
+      }
+    } catch {
+      subagents = [];
+    }
+
+    if (format === 'csv') {
+      const csvRows = ['id,timestamp,name,model,status,durationMs,tokensUsed,task'];
+      for (const item of subagents) {
+        const name = `"${(item.name || '').replace(/"/g, '""')}"`;
+        const task = `"${(item.task || '').replace(/"/g, '""')}"`;
+        csvRows.push(`${item.id},${item.timestamp},${name},${item.model},${item.status},${item.durationMs},${item.tokensUsed || 0},${task}`);
+      }
+      res.writeHead(200, {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': 'attachment; filename="pi-subagents-telemetry.csv"'
+      });
+      res.end(csvRows.join('\n'));
+      return;
+    }
+
+    if (format === 'md') {
+      const mdLines = ['# Pi Subagent Telemetry Report\n'];
+      mdLines.push(`- **Generated:** ${new Date().toISOString()}`);
+      mdLines.push(`- **Total Subagent Executions:** ${subagents.length}\n`);
+      mdLines.push('| ID | Name | Model | Status | Duration (ms) | Tokens | Task |');
+      mdLines.push('| --- | --- | --- | --- | --- | --- | --- |');
+      for (const item of subagents) {
+        mdLines.push(`| \`${item.id}\` | ${item.name} | ${item.model} | ${item.status} | ${item.durationMs}ms | ${item.tokensUsed || 0} | ${item.task} |`);
+      }
+      res.writeHead(200, {
+        'Content-Type': 'text/markdown',
+        'Content-Disposition': 'attachment; filename="pi-subagents-telemetry.md"'
+      });
+      res.end(mdLines.join('\n'));
+      return;
+    }
+
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Content-Disposition': 'attachment; filename="pi-subagents-telemetry.json"'
+    });
+    res.end(JSON.stringify(subagents, null, 2));
+    return;
+  }
+
   // Filtered Export Endpoint
   if (url.pathname === '/api/export') {
     const format = (url.searchParams.get('format') || 'json').toLowerCase();
