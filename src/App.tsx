@@ -26,7 +26,8 @@ import {
   Award,
   Copy,
   Check,
-  ExternalLink
+  ExternalLink,
+  Keyboard
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -95,6 +96,7 @@ export default function App() {
   const [showSentinels, setShowSentinels] = useState<boolean>(false);
   const [showHealth, setShowHealth] = useState<boolean>(false);
   const [showBadgeModal, setShowBadgeModal] = useState<boolean>(false);
+  const [showHotkeyModal, setShowHotkeyModal] = useState<boolean>(false);
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
@@ -124,6 +126,29 @@ export default function App() {
     handleRefresh();
     const interval = setInterval(handleRefresh, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === '?') {
+        setShowHotkeyModal(prev => !prev);
+      } else if (e.key.toLowerCase() === 'r') {
+        handleRefresh();
+      } else if (e.key.toLowerCase() === 'h') {
+        setShowHealth(prev => !prev);
+      } else if (e.key.toLowerCase() === 's') {
+        setShowSentinels(prev => !prev);
+      } else if (e.key.toLowerCase() === 'b') {
+        setShowSubagents(prev => !prev);
+      } else if (e.key.toLowerCase() === 'v') {
+        setShowVideo(prev => !prev);
+      } else if (e.key.toLowerCase() === 'a') {
+        setShowAnalytics(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const exportMarkdownLog = () => {
@@ -228,6 +253,13 @@ export default function App() {
                   <ExternalLink className="w-3 h-3 text-indigo-400" />
                   Report
                 </a>
+                <button
+                  onClick={() => setShowHotkeyModal(!showHotkeyModal)}
+                  className="p-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 rounded-md text-xs transition"
+                  title="Keyboard Hotkeys (?)"
+                >
+                  <Keyboard className="w-3.5 h-3.5" />
+                </button>
               </div>
               <p className="text-xs text-slate-400 font-mono">
                 Continuous Autonomous Self-Improvement Log • http://localhost:3050
@@ -297,6 +329,55 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Hotkey Guide Modal */}
+        {showHotkeyModal && (
+          <div className="p-6 bg-slate-900/90 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Keyboard className="w-5 h-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-slate-100">Keyboard Hotkeys Navigation</h2>
+              </div>
+              <button
+                onClick={() => setShowHotkeyModal(false)}
+                className="text-xs text-slate-400 hover:text-slate-200"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">?</span>
+                <span className="text-slate-300">Toggle Hotkeys</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">R</span>
+                <span className="text-slate-300">Refresh Feed</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">H</span>
+                <span className="text-slate-300">Toggle Health</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">S</span>
+                <span className="text-slate-300">Toggle Sentinels</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">B</span>
+                <span className="text-slate-300">Toggle Subagents</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">V</span>
+                <span className="text-slate-300">Toggle Video</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">A</span>
+                <span className="text-slate-300">Toggle Analytics</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Badge Preview Modal */}
         {showBadgeModal && (
           <div className="p-6 bg-slate-900/90 border border-amber-500/30 rounded-3xl shadow-2xl space-y-4">
@@ -570,7 +651,7 @@ export default function App() {
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-amber500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
               <span>EXPORTER READY</span>
               <Sparkles className="w-4 h-4 text-amber-400" />

@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvqxorw",
+    "timestamp": "2026-07-22T07:13:46.412Z",
+    "relativeTime": "Just now",
+    "title": "Global Keyboard Hotkeys Navigation System",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added global keyboard hotkeys (?, R, H, S, B, V, A) and hotkey guide modal in Progress Hub.",
+    "highlights": [
+      "Keyboard Hotkeys Manager in http://localhost:3050 web app",
+      "Hotkeys ?, R, H, S, B, V, A for instant navigation",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvqxorw",
+    "timestamp": "2026-07-22T07:13:46.412Z",
+    "relativeTime": "Just now",
+    "title": "Global Keyboard Hotkeys Navigation System",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added global keyboard hotkeys (?, R, H, S, B, V, A) and hotkey guide modal in Progress Hub.",
+    "highlights": [
+      "Keyboard Hotkeys Manager in http://localhost:3050 web app",
+      "Hotkeys ?, R, H, S, B, V, A for instant navigation",
+      "100% test pass rate across 74 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvqw725",
     "timestamp": "2026-07-22T07:12:36.797Z",
     "relativeTime": "Just now",
