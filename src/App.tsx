@@ -714,6 +714,12 @@ export default function App() {
   const completedSubagentsCount = subagents.filter(s => s.status === 'Completed').length;
   const subagentSuccessRate = subagents.length > 0 ? Math.round((completedSubagentsCount / subagents.length) * 100) : 100;
 
+  const totalSentinelsCount = sentinels.length;
+  const passedSentinelsCount = sentinels.filter(s => s.status === 'PASSED' || s.status === 'OK' || s.status === 'Pass').length;
+  const sentinelPassRate = totalSentinelsCount > 0 ? Math.round((passedSentinelsCount / totalSentinelsCount) * 100) : 100;
+  const avgSentinelSpeed = totalSentinelsCount > 0 ? Math.round(sentinels.reduce((sum, s) => sum + (s.speedMs || 0), 0) / totalSentinelsCount) : 0;
+  const fastestSentinel = sentinels.length > 0 ? [...sentinels].sort((a, b) => (a.speedMs || 0) - (b.speedMs || 0))[0] : null;
+
   const subagentModelStats = subagents.reduce((acc, s) => {
     const m = s.model || 'Unknown';
     if (!acc[m]) {
@@ -1257,6 +1263,30 @@ export default function App() {
                 </div>
               </div>
             </div>
+
+            {/* Aggregate Sentinel Telemetry KPI Summary Cards */}
+            {sentinels.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">TOTAL SENTINELS</div>
+                  <div className="text-emerald-300 font-bold text-sm mt-0.5">{totalSentinelsCount} Checks</div>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">HEALTH PASS RATE</div>
+                  <div className="text-cyan-300 font-bold text-sm mt-0.5">{sentinelPassRate}% ({passedSentinelsCount}/{totalSentinelsCount})</div>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">AVG VERIFICATION SPEED</div>
+                  <div className="text-indigo-300 font-bold text-sm mt-0.5">{avgSentinelSpeed}ms</div>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">FASTEST SENTINEL</div>
+                  <div className="text-amber-300 font-bold text-sm mt-0.5 truncate" title={fastestSentinel ? fastestSentinel.name : ''}>
+                    {fastestSentinel ? `${fastestSentinel.speedMs}ms (${fastestSentinel.name})` : 'N/A'}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto pr-1">
               {filteredSentinels.map((s) => (
