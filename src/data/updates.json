@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvq9u5n",
+    "timestamp": "2026-07-22T06:55:13.643Z",
+    "relativeTime": "Just now",
+    "title": "Markdown/JSON Exporter & Health Verification Reporter",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added Markdown and JSON Export capabilities to http://localhost:3050 web app and created automated Health Verification Reporter (verify-report.ts).",
+    "highlights": [
+      "Export Markdown release notes & JSON log files from Progress Hub",
+      "Health Verification Reporter aggregates memory, sentinels, & test stats",
+      "100% test pass rate across 64 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvq9u5n",
+    "timestamp": "2026-07-22T06:55:13.643Z",
+    "relativeTime": "Just now",
+    "title": "Markdown/JSON Exporter & Health Verification Reporter",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added Markdown and JSON Export capabilities to http://localhost:3050 web app and created automated Health Verification Reporter (verify-report.ts).",
+    "highlights": [
+      "Export Markdown release notes & JSON log files from Progress Hub",
+      "Health Verification Reporter aggregates memory, sentinels, & test stats",
+      "100% test pass rate across 64 powerhouse test suites"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvq876s",
     "timestamp": "2026-07-22T06:53:57.220Z",
     "relativeTime": "Just now",

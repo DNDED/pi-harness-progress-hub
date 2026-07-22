@@ -15,7 +15,9 @@ import {
   Search,
   Code2,
   Video,
-  Play
+  Play,
+  Download,
+  FileText
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import { ProgressVideo, VideoUpdateItem } from './remotion/ProgressVideo';
@@ -62,6 +64,36 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const exportMarkdownLog = () => {
+    const md = `# Pi Agent Harness — Continuous Improvement Log\n\n` +
+      `*Generated on ${new Date().toLocaleString()} • http://localhost:3050*\n\n` +
+      updates.map((u, i) => (
+        `### ${i + 1}. ${u.title} [${u.category}]\n` +
+        `**Status**: ${u.status} | **Author**: ${u.author} | **Time**: ${u.relativeTime}\n\n` +
+        `${u.description}\n\n` +
+        `**Key Improvements:**\n` +
+        u.highlights.map(h => `- ${h}`).join('\n') + '\n\n'
+      )).join('---\n\n');
+
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pi-harness-changelog-${Date.now()}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportJsonLog = () => {
+    const blob = new Blob([JSON.stringify(updates, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pi-harness-updates-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const filteredUpdates = updates.filter((item) => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     const matchesQuery = searchQuery === '' ||
@@ -99,6 +131,22 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={exportMarkdownLog}
+              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5"
+              title="Export Markdown Changelog"
+            >
+              <FileText className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden md:inline">Markdown</span>
+            </button>
+            <button
+              onClick={exportJsonLog}
+              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5"
+              title="Export JSON Updates"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden md:inline">JSON</span>
+            </button>
             <button
               onClick={() => setShowVideo(!showVideo)}
               className="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-slate-100 rounded-lg text-xs font-semibold shadow-lg transition flex items-center gap-1.5"
@@ -169,7 +217,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">58 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">62 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
@@ -185,11 +233,11 @@ export default function App() {
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
             <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
-              <span>REMOTION VIDEO</span>
+              <span>EXPORTER READY</span>
               <Sparkles className="w-4 h-4 text-amber-400" />
             </div>
-            <div className="text-3xl font-extrabold font-mono text-amber-300">Active</div>
-            <div className="mt-2 text-xs text-slate-400">Remotion player ready on 3050</div>
+            <div className="text-3xl font-extrabold font-mono text-amber-300">MD / JSON</div>
+            <div className="mt-2 text-xs text-slate-400">Instant markdown & JSON export</div>
           </div>
         </div>
 
