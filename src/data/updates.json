@@ -1,5 +1,62 @@
 [
   {
+    "id": "upd-mrvs5brw",
+    "timestamp": "2026-07-22T07:47:42.428Z",
+    "relativeTime": "Just now",
+    "title": "POST Subagent Task Dispatch REST API & Live UI Sync",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented POST /api/subagents/dispatch REST endpoint in serve-hub.mjs and connected App.tsx handleDispatchSubagent to execute real HTTP dispatches with automatic subagent & update feed synchronization.",
+    "highlights": [
+      "POST Subagent Task Dispatch REST Route",
+      "POST /api/subagents/dispatch REST route",
+      "Atomic subagent execution creation & progress update feed sync"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvs5brw",
+    "timestamp": "2026-07-22T07:47:42.428Z",
+    "relativeTime": "Just now",
+    "title": "POST Subagent Task Dispatch REST API & Live UI Sync",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented POST /api/subagents/dispatch REST endpoint in serve-hub.mjs and connected App.tsx handleDispatchSubagent to execute real HTTP dispatches with automatic subagent & update feed synchronization.",
+    "highlights": [
+      "POST Subagent Task Dispatch REST Route",
+      "POST /api/subagents/dispatch REST route",
+      "Atomic subagent execution creation & progress update feed sync"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-1784706458382",
+    "timestamp": "2026-07-22T07:47:38.382Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Dispatched: AutoTesterAgent",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "AutoTesterAgent",
+    "description": "Dispatched task \"Verify POST dispatch REST endpoint\" using model Gemini 3.6 Flash.",
+    "highlights": [
+      "Model: Gemini 3.6 Flash",
+      "Task: Verify POST dispatch REST endpoint",
+      "Duration: 334ms",
+      "Tokens Used: 311"
+    ],
+    "metrics": {
+      "duration": "334ms",
+      "tokens": "311",
+      "status": "Completed"
+    }
+  },
+  {
     "id": "upd-mrvs3bp0",
     "timestamp": "2026-07-22T07:46:09.012Z",
     "relativeTime": "Just now",

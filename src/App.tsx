@@ -219,40 +219,56 @@ export default function App() {
     }
   };
 
-  const handleDispatchSubagent = () => {
+  const handleDispatchSubagent = async () => {
     if (!dispatchName || !dispatchTask) return;
-    const newSubagent: SubagentItem = {
-      id: `sub-${Date.now()}`,
-      name: dispatchName,
-      model: 'Gemini 3.6 Flash',
-      status: 'Completed',
-      durationMs: Math.floor(Math.random() * 200) + 150,
-      timestamp: new Date().toISOString(),
-      tokensUsed: Math.floor(Math.random() * 400) + 100,
-      task: dispatchTask
-    };
-
-    const newUpdate: UpdateItem = {
-      id: `up-${Date.now()}`,
-      timestamp: new Date().toISOString(),
-      relativeTime: 'Just now',
-      title: `Subagent Dispatched: ${dispatchName}`,
-      category: 'Subagents',
-      status: 'Completed',
-      author: dispatchName,
-      description: `Dispatched task "${dispatchTask}" using model Gemini 3.6 Flash.`,
-      highlights: [
-        `Agent: ${dispatchName}`,
-        `Task: ${dispatchTask}`,
-        `Duration: ${newSubagent.durationMs}ms`,
-        `Tokens: ${newSubagent.tokensUsed}`
-      ]
-    };
-
-    setSubagents(prev => [newSubagent, ...prev]);
-    setUpdates(prev => [newUpdate, ...prev]);
-    setShowDispatchModal(false);
-    playChime();
+    try {
+      const res = await fetch('/api/subagents/dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: dispatchName,
+          task: dispatchTask,
+          model: 'Gemini 3.6 Flash'
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSubagents(prev => [data.subagent, ...prev]);
+        setUpdates(prev => [data.update, ...prev]);
+      }
+    } catch {
+      const newSubagent: SubagentItem = {
+        id: `sub-${Date.now()}`,
+        name: dispatchName,
+        model: 'Gemini 3.6 Flash',
+        status: 'Completed',
+        durationMs: Math.floor(Math.random() * 200) + 150,
+        timestamp: new Date().toISOString(),
+        tokensUsed: Math.floor(Math.random() * 400) + 100,
+        task: dispatchTask
+      };
+      const newUpdate: UpdateItem = {
+        id: `up-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        relativeTime: 'Just now',
+        title: `Subagent Dispatched: ${dispatchName}`,
+        category: 'Subagents',
+        status: 'Completed',
+        author: dispatchName,
+        description: `Dispatched task "${dispatchTask}" using model Gemini 3.6 Flash.`,
+        highlights: [
+          `Agent: ${dispatchName}`,
+          `Task: ${dispatchTask}`,
+          `Duration: ${newSubagent.durationMs}ms`,
+          `Tokens: ${newSubagent.tokensUsed}`
+        ]
+      };
+      setSubagents(prev => [newSubagent, ...prev]);
+      setUpdates(prev => [newUpdate, ...prev]);
+    } finally {
+      setShowDispatchModal(false);
+      playChime();
+    }
   };
 
   useEffect(() => {

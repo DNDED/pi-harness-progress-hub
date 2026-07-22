@@ -1,5 +1,15 @@
 [
   {
+    "id": "sub-1784706458381-437",
+    "name": "AutoTesterAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 334,
+    "timestamp": "2026-07-22T07:47:38.381Z",
+    "tokensUsed": 311,
+    "task": "Verify POST dispatch REST endpoint"
+  },
+  {
     "id": "sub-1784705963567-811",
     "name": "TestWorkerAgent",
     "model": "Gemini 3.6 Flash",

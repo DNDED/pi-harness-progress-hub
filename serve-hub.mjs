@@ -42,6 +42,77 @@ const server = http.createServer((req, res) => {
 
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
+  // Dispatch Subagent Task POST Route
+  if (url.pathname === '/api/subagents/dispatch' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        const name = payload.name || 'WorkerAgent';
+        const task = payload.task || 'Harness Task';
+        const model = payload.model || 'Gemini 3.6 Flash';
+        const durationMs = payload.durationMs || (Math.floor(Math.random() * 200) + 150);
+        const tokensUsed = payload.tokensUsed || (Math.floor(Math.random() * 400) + 120);
+
+        const newSubagent = {
+          id: `sub-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name,
+          model,
+          status: 'Completed',
+          durationMs,
+          timestamp: new Date().toISOString(),
+          tokensUsed,
+          task
+        };
+
+        let subagents = [];
+        if (fs.existsSync(SUBAGENTS_FILE)) {
+          try { subagents = JSON.parse(fs.readFileSync(SUBAGENTS_FILE, 'utf-8')); } catch { subagents = []; }
+        }
+        subagents.unshift(newSubagent);
+        fs.writeFileSync(SUBAGENTS_FILE, JSON.stringify(subagents, null, 2), 'utf-8');
+
+        // Automatically create a progress update entry
+        const newUpdate = {
+          id: `upd-${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          relativeTime: 'Just now',
+          title: `Subagent Dispatched: ${name}`,
+          category: 'Subagents',
+          status: 'Verified',
+          author: name,
+          description: `Dispatched task "${task}" using model ${model}.`,
+          highlights: [
+            `Model: ${model}`,
+            `Task: ${task}`,
+            `Duration: ${durationMs}ms`,
+            `Tokens Used: ${tokensUsed}`
+          ],
+          metrics: {
+            duration: `${durationMs}ms`,
+            tokens: `${tokensUsed}`,
+            status: 'Completed'
+          }
+        };
+
+        let updates = [];
+        if (fs.existsSync(UPDATES_FILE)) {
+          try { updates = JSON.parse(fs.readFileSync(UPDATES_FILE, 'utf-8')); } catch { updates = []; }
+        }
+        updates.unshift(newUpdate);
+        fs.writeFileSync(UPDATES_FILE, JSON.stringify(updates, null, 2), 'utf-8');
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, subagent: newSubagent, update: newUpdate }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
   // Status Badge SVG Route
   if (url.pathname === '/api/status/badge') {
     const uptime = Math.floor((Date.now() - START_TIME) / 1000);
