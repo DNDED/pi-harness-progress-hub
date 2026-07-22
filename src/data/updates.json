@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrgctq",
+    "timestamp": "2026-07-22T07:28:17.390Z",
+    "relativeTime": "Just now",
+    "title": "Interactive Timeline Compact/Expanded View Toggle",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added hotkey 'C' and header button to switch between compact single-line and expanded detailed timeline modes.",
+    "highlights": [
+      "Timeline View Toggle",
+      "Compact/Expanded Timeline Modes",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrgctq",
+    "timestamp": "2026-07-22T07:28:17.390Z",
+    "relativeTime": "Just now",
+    "title": "Interactive Timeline Compact/Expanded View Toggle",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added hotkey 'C' and header button to switch between compact single-line and expanded detailed timeline modes.",
+    "highlights": [
+      "Timeline View Toggle",
+      "Compact/Expanded Timeline Modes",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvreice",
     "timestamp": "2026-07-22T07:26:51.230Z",
     "relativeTime": "Just now",
