@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Player } from '@remotion/player';
 import {
   Zap,
   Terminal,
@@ -12,9 +13,12 @@ import {
   Layers,
   ShieldCheck,
   Search,
-  Code2
+  Code2,
+  Video,
+  Play
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
+import { ProgressVideo, VideoUpdateItem } from './remotion/ProgressVideo';
 
 interface UpdateItem {
   id: string;
@@ -34,13 +38,14 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [showVideo, setShowVideo] = useState<boolean>(false);
 
   const categories = ['All', 'Harness Core', 'Sentinels', 'UI/TUI', 'Progress Dashboard', 'Subagents'];
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      const res = await fetch('/src/data/updates.json?t=' + Date.now());
+      const res = await fetch('/api/updates?t=' + Date.now());
       if (res.ok) {
         const data = await res.json();
         setUpdates(data);
@@ -65,6 +70,8 @@ export default function App() {
       item.highlights.some(h => h.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesQuery;
   });
+
+  const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -93,6 +100,13 @@ export default function App() {
 
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setShowVideo(!showVideo)}
+              className="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-slate-100 rounded-lg text-xs font-semibold shadow-lg transition flex items-center gap-1.5"
+            >
+              <Video className="w-3.5 h-3.5" />
+              <span>{showVideo ? 'Hide Video Reel' : 'Watch Remotion Video'}</span>
+            </button>
+            <button
               onClick={handleRefresh}
               className={`p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition flex items-center gap-1.5 ${isRefreshing ? 'animate-spin' : ''}`}
               title="Refresh log feed"
@@ -109,6 +123,33 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Remotion Video Player Section */}
+        {showVideo && (
+          <div className="p-6 bg-slate-900/80 border border-cyan-500/30 rounded-3xl shadow-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Play className="w-5 h-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-slate-100">Remotion Progress Reel</h2>
+              </div>
+              <span className="text-xs font-mono text-slate-400">30 FPS • Dynamic Composition</span>
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 aspect-video max-w-4xl mx-auto shadow-inner">
+              <Player
+                component={ProgressVideo}
+                inputProps={{ updates: updates as VideoUpdateItem[] }}
+                durationInFrames={totalVideoFrames}
+                compositionWidth={1280}
+                compositionHeight={720}
+                fps={30}
+                style={{ width: '100%', height: '100%' }}
+                controls
+                autoPlay
+                loop
+              />
+            </div>
+          </div>
+        )}
+
         {/* Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
@@ -144,11 +185,11 @@ export default function App() {
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
             <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl group-hover:bg-amber-500/10 transition"></div>
             <div className="flex items-center justify-between text-slate-400 text-xs font-medium mb-2">
-              <span>SUBAGENT ROUNDS</span>
+              <span>REMOTION VIDEO</span>
               <Sparkles className="w-4 h-4 text-amber-400" />
             </div>
-            <div className="text-3xl font-extrabold font-mono text-amber-300">Vertex #1</div>
-            <div className="mt-2 text-xs text-slate-400">Scheduled research & enhancements</div>
+            <div className="text-3xl font-extrabold font-mono text-amber-300">Active</div>
+            <div className="mt-2 text-xs text-slate-400">Remotion player ready on 3050</div>
           </div>
         </div>
 
