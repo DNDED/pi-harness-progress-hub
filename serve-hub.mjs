@@ -42,6 +42,33 @@ const server = http.createServer((req, res) => {
 
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
+  // DELETE /api/updates REST Route
+  if (req.method === 'DELETE' && url.pathname === '/api/updates') {
+    try {
+      const defaultUpdates = [
+        {
+          id: 'upd-01',
+          timestamp: new Date().toISOString(),
+          relativeTime: 'Just now',
+          title: 'Pi Progress Hub Server Initialized',
+          category: 'Core Runtime',
+          status: 'Verified',
+          author: 'pi-agent-harness',
+          description: 'Initialized Pi Progress Hub real-time telemetry server and static dashboard.',
+          highlights: ['Live server running on port 3050', 'REST API endpoints active', 'Atomic data writer enabled'],
+          metrics: { status: 'Optimal' }
+        }
+      ];
+      fs.writeFileSync(UPDATES_FILE, JSON.stringify(defaultUpdates, null, 2), 'utf-8');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, message: 'Timeline updates reset', updates: defaultUpdates }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
   // Trigger Sentinel Run POST Route
   if (url.pathname === '/api/sentinels/run' && (req.method === 'POST' || req.method === 'GET')) {
     let sentinels = [];

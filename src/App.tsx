@@ -376,6 +376,18 @@ export default function App() {
     }
   };
 
+  const handleClearUpdates = async () => {
+    try {
+      const res = await fetch('/api/updates', { method: 'DELETE' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.updates) setUpdates(data.updates);
+      }
+    } catch {
+      // Fallback
+    }
+  };
+
   const handleRunBenchmark = async () => {
     setIsRunningBenchmark(true);
     try {
@@ -1557,6 +1569,14 @@ export default function App() {
                   <span>Reset Filters</span>
                 </button>
               )}
+              <button
+                onClick={handleClearUpdates}
+                className="px-2.5 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                title="Reset timeline feed updates to default baseline"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                <span>Reset Feed</span>
+              </button>
               <div className="relative w-full sm:w-64">
                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
