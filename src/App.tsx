@@ -1945,7 +1945,14 @@ export default function App() {
                     </div>
                   )}
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-900">
-                    <span>{s.model}</span>
+                    <div className="flex items-center gap-2">
+                      <span>{s.model}</span>
+                      {s.tokensUsed && s.durationMs > 0 ? (
+                        <span className="text-[10px] text-cyan-400 font-semibold bg-cyan-500/10 px-1 py-0.2 rounded border border-cyan-500/20" title="Subagent Token Generation Throughput Rate">
+                          {(s.tokensUsed / (s.durationMs / 1000)).toFixed(1)} tok/s
+                        </span>
+                      ) : null}
+                    </div>
                     <div className="flex items-center gap-1.5">
                       {s.durationMs > 15000 ? (
                         <span className="px-1.5 py-0.5 bg-amber-500/10 text-amber-300 border border-amber-500/20 rounded text-[9px] font-semibold flex items-center gap-0.5" title="Execution duration exceeded 15 seconds">
