@@ -1,5 +1,25 @@
 [
   {
+    "id": "sub-1784704869241-684",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:21:09.241Z",
+    "tokensUsed": 540,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
+    "id": "sub-1784704861507-443",
+    "name": "TestWorkerAgent",
+    "model": "Gemini 3.6 Flash",
+    "status": "Completed",
+    "durationMs": 180,
+    "timestamp": "2026-07-22T07:21:01.507Z",
+    "tokensUsed": 406,
+    "task": "Verify powerhouse subagent execution engine"
+  },
+  {
     "id": "sub-001",
     "name": "Gemini 3.6 Flash Sentinel Worker",
     "model": "Google Vertex Gemini 3.6 Flash",
