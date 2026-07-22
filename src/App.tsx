@@ -709,6 +709,10 @@ export default function App() {
 
   const maxSubagentDuration = Math.max(1, ...subagents.map(s => s.durationMs));
   const runningSubagentsCount = subagents.filter(s => s.status === 'Running').length;
+  const totalSubagentTokens = subagents.reduce((sum, s) => sum + (s.tokensUsed || 0), 0);
+  const avgSubagentDuration = subagents.length > 0 ? Math.round(subagents.reduce((sum, s) => sum + (s.durationMs || 0), 0) / subagents.length) : 0;
+  const completedSubagentsCount = subagents.filter(s => s.status === 'Completed').length;
+  const subagentSuccessRate = subagents.length > 0 ? Math.round((completedSubagentsCount / subagents.length) * 100) : 100;
 
   const subagentModelStats = subagents.reduce((acc, s) => {
     const m = s.model || 'Unknown';
@@ -1447,6 +1451,28 @@ export default function App() {
                 ))}
               </div>
             </div>
+
+            {/* Aggregate Subagent Telemetry KPI Summary Cards */}
+            {subagents.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">TOTAL EXECUTIONS</div>
+                  <div className="text-cyan-300 font-bold text-sm mt-0.5">{subagents.length} Tasks</div>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">TOTAL TOKENS GENERATED</div>
+                  <div className="text-indigo-300 font-bold text-sm mt-0.5">{totalSubagentTokens.toLocaleString()} Tokens</div>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">AVG EXECUTION SPEED</div>
+                  <div className="text-emerald-300 font-bold text-sm mt-0.5">{avgSubagentDuration}ms</div>
+                </div>
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">TASK SUCCESS RATE</div>
+                  <div className="text-amber-300 font-bold text-sm mt-0.5">{subagentSuccessRate}% Passed</div>
+                </div>
+              </div>
+            )}
 
             {/* Subagent Model Leaderboard */}
             {modelLeaderboard.length > 0 && (
