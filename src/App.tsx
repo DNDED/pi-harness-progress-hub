@@ -1894,19 +1894,27 @@ export default function App() {
                       <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 h-full rounded-full animate-pulse w-full"></div>
                     </div>
                   ) : (
-                    <div className="w-full bg-slate-900 h-1 rounded-full overflow-hidden border border-slate-800/80" title={`Execution duration: ${s.durationMs}ms`}>
-                      <div
-                        className={`h-full rounded-full transition-all duration-300 ${
-                          s.durationMs < 3000
-                            ? 'bg-emerald-400'
-                            : s.durationMs < 10000
-                            ? 'bg-cyan-400'
-                            : s.durationMs < 20000
-                            ? 'bg-amber-400'
-                            : 'bg-rose-500'
-                        }`}
-                        style={{ width: `${Math.min(100, Math.max(8, (s.durationMs / maxSubagentDuration) * 100))}%` }}
-                      ></div>
+                    <div className="space-y-1">
+                      <div className="w-full bg-slate-900 h-1 rounded-full overflow-hidden border border-slate-800/80" title={`Execution duration: ${s.durationMs}ms`}>
+                        <div
+                          className={`h-full rounded-full transition-all duration-300 ${
+                            s.durationMs < 3000
+                              ? 'bg-emerald-400'
+                              : s.durationMs < 10000
+                              ? 'bg-cyan-400'
+                              : s.durationMs < 20000
+                              ? 'bg-amber-400'
+                              : 'bg-rose-500'
+                          }`}
+                          style={{ width: `${Math.min(100, Math.max(8, (s.durationMs / maxSubagentDuration) * 100))}%` }}
+                        ></div>
+                      </div>
+                      <div className="w-full bg-slate-900 h-1 rounded-full overflow-hidden border border-slate-800/80" title={`Token usage: ${s.tokensUsed || 0} tokens`}>
+                        <div
+                          className="h-full bg-indigo-500 rounded-full transition-all duration-300"
+                          style={{ width: `${Math.min(100, Math.max(8, ((s.tokensUsed || 0) / Math.max(...subagents.map(i => i.tokensUsed || 0), 1)) * 100))}%` }}
+                        ></div>
+                      </div>
                     </div>
                   )}
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-900">
