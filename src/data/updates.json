@@ -1,5 +1,73 @@
 [
   {
+    "id": "upd-mrvpvfof",
+    "timestamp": "2026-07-22T06:44:01.695Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvpvfof",
+    "timestamp": "2026-07-22T06:44:01.695Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvpv88r",
+    "timestamp": "2026-07-22T06:43:52.059Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
+    "id": "upd-mrvpv88r",
+    "timestamp": "2026-07-22T06:43:52.059Z",
+    "relativeTime": "Just now",
+    "title": "Test Progress Sync",
+    "category": "Harness Core",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Verifying live progress sync functionality.",
+    "highlights": [
+      "Appends structured record to updates.json",
+      "Posts to localhost:3050"
+    ],
+    "metrics": {
+      "status": "Pass"
+    }
+  },
+  {
     "id": "upd-001",
     "timestamp": "2026-07-22T06:30:00Z",
     "relativeTime": "Just now",
