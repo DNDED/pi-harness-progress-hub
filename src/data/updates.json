@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrlpvr",
+    "timestamp": "2026-07-22T07:32:27.591Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Status Filter Reset Button UI",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added Reset Status button inside the Live Subagent Telemetry Drawer when filtering subagents.",
+    "highlights": [
+      "Subagent Reset Status UI",
+      "Reset subagent status filter button",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrlpvr",
+    "timestamp": "2026-07-22T07:32:27.591Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Status Filter Reset Button UI",
+    "category": "Progress Dashboard",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Added Reset Status button inside the Live Subagent Telemetry Drawer when filtering subagents.",
+    "highlights": [
+      "Subagent Reset Status UI",
+      "Reset subagent status filter button",
+      "100% test pass rate across 126 core unit tests & 42 sentinels"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvrjwlt",
     "timestamp": "2026-07-22T07:31:02.993Z",
     "relativeTime": "Just now",

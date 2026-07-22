@@ -838,6 +838,14 @@ export default function App() {
                 <h2 className="text-lg font-bold text-slate-100">Live Subagent Execution Telemetry</h2>
               </div>
               <div className="flex items-center gap-2">
+                {subagentStatusFilter !== 'All' && (
+                  <button
+                    onClick={() => setSubagentStatusFilter('All')}
+                    className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-slate-800 text-cyan-300 hover:text-cyan-200 border border-slate-700 rounded transition"
+                  >
+                    Reset Status
+                  </button>
+                )}
                 <button
                   onClick={() => setShowDispatchModal(true)}
                   className="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
