@@ -25,7 +25,8 @@ import {
   HeartPulse,
   Award,
   Copy,
-  Check
+  Check,
+  ExternalLink
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -210,6 +211,16 @@ export default function App() {
                   <Award className="w-3 h-3 text-amber-400" />
                   Badge
                 </button>
+                <a
+                  href="/api/health/summary"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-2 py-0.5 text-xs font-semibold bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20 rounded-full flex items-center gap-1 transition"
+                  title="Open HTML Health Report in new tab"
+                >
+                  <ExternalLink className="w-3 h-3 text-indigo-400" />
+                  Report
+                </a>
               </div>
               <p className="text-xs text-slate-400 font-mono">
                 Continuous Autonomous Self-Improvement Log • http://localhost:3050
@@ -514,7 +525,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">72 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">74 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
