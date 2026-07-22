@@ -173,6 +173,7 @@ export default function App() {
   const [sentinelLogFilter, setSentinelLogFilter] = useState<string>('');
   const [copiedLog, setCopiedLog] = useState<boolean>(false);
   const [copiedTaskId, setCopiedTaskId] = useState<string | null>(null);
+  const [copiedCliId, setCopiedCliId] = useState<string | null>(null);
   const [isReverifyingSentinels, setIsReverifyingSentinels] = useState<boolean>(false);
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
@@ -1619,6 +1620,19 @@ export default function App() {
                       >
                         {copiedTaskId === s.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-slate-400" />}
                         <span>{copiedTaskId === s.id ? 'Copied' : 'Task'}</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          const cliCmd = `npx tsx subagent-runner.ts --name "${s.name}" --model "${s.model}" --task "${s.task.replace(/"/g, '\\"')}"`;
+                          navigator.clipboard.writeText(cliCmd);
+                          setCopiedCliId(s.id);
+                          setTimeout(() => setCopiedCliId(null), 2000);
+                        }}
+                        className="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                        title="Copy CLI command snippet to clipboard"
+                      >
+                        {copiedCliId === s.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Code2 className="w-3 h-3 text-cyan-400" />}
+                        <span>{copiedCliId === s.id ? 'Copied' : 'CLI'}</span>
                       </button>
                       <button
                         onClick={async () => {
