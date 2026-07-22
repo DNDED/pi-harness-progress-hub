@@ -30,7 +30,8 @@ import {
   Keyboard,
   Volume2,
   VolumeX,
-  FileJson
+  FileJson,
+  Palette
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -102,6 +103,7 @@ export default function App() {
   const [showHotkeyModal, setShowHotkeyModal] = useState<boolean>(false);
   const [copiedBadge, setCopiedBadge] = useState<boolean>(false);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
+  const [activeTheme, setActiveTheme] = useState<'slate' | 'cyber' | 'obsidian'>('slate');
 
   const prevUpdateCountRef = useRef<number>(updates.length);
 
@@ -114,8 +116,8 @@ export default function App() {
       const gain = ctx.createGain();
 
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
 
       gain.gain.setValueAtTime(0.15, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
@@ -185,6 +187,8 @@ export default function App() {
         setShowAnalytics(prev => !prev);
       } else if (e.key.toLowerCase() === 'm') {
         setAudioEnabled(prev => !prev);
+      } else if (e.key.toLowerCase() === 't') {
+        setActiveTheme(prev => prev === 'slate' ? 'cyber' : prev === 'cyber' ? 'obsidian' : 'slate');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -253,8 +257,14 @@ export default function App() {
 
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
 
+  const getThemeBg = () => {
+    if (activeTheme === 'cyber') return 'bg-zinc-950 text-emerald-400 font-mono';
+    if (activeTheme === 'obsidian') return 'bg-black text-slate-200';
+    return 'bg-slate-950 text-slate-100';
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className={`min-h-screen ${getThemeBg()} flex flex-col transition-colors duration-300`}>
       {/* Top Banner */}
       <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
@@ -303,6 +313,13 @@ export default function App() {
                   <FileJson className="w-3 h-3 text-cyan-400" />
                   JSON API
                 </a>
+                <button
+                  onClick={() => setActiveTheme(prev => prev === 'slate' ? 'cyber' : prev === 'cyber' ? 'obsidian' : 'slate')}
+                  className="p-1 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/20 rounded-md text-xs transition"
+                  title={`Active Theme: ${activeTheme.toUpperCase()} (T)`}
+                >
+                  <Palette className="w-3.5 h-3.5" />
+                </button>
                 <button
                   onClick={() => setAudioEnabled(!audioEnabled)}
                   className={`p-1 border rounded-md text-xs transition ${
@@ -438,6 +455,10 @@ export default function App() {
               <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
                 <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">M</span>
                 <span className="text-slate-300">Toggle Audio Mute</span>
+              </div>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                <span className="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-500/10 rounded mr-2">T</span>
+                <span className="text-slate-300">Cycle Visual Theme</span>
               </div>
             </div>
           </div>
@@ -702,7 +723,7 @@ export default function App() {
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="mt-2 text-xs text-slate-400">74 core + 42 sentinels passing</div>
+            <div className="mt-2 text-xs text-slate-400">124 core + 42 sentinels passing</div>
           </div>
 
           <div className="p-5 bg-slate-900/40 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
