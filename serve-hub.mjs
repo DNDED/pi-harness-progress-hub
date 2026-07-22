@@ -69,6 +69,41 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // POST /api/updates/item - Create new milestone
+  if (req.method === 'POST' && url.pathname === '/api/updates/item') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        let updates = [];
+        if (fs.existsSync(UPDATES_FILE)) {
+          updates = JSON.parse(fs.readFileSync(UPDATES_FILE, 'utf-8'));
+        }
+        const newUpdate = {
+          id: `upd-${Date.now().toString(36)}`,
+          timestamp: new Date().toISOString(),
+          relativeTime: 'Just now',
+          title: payload.title || 'New Milestone Update',
+          category: payload.category || 'General',
+          status: payload.status || 'Verified',
+          author: payload.author || 'dashboard-user',
+          description: payload.description || '',
+          highlights: Array.isArray(payload.highlights) ? payload.highlights : [],
+          metrics: payload.metrics || { status: 'Optimal' }
+        };
+        const updatedList = [newUpdate, ...updates];
+        fs.writeFileSync(UPDATES_FILE, JSON.stringify(updatedList, null, 2), 'utf-8');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, update: newUpdate, updates: updatedList }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
   // PUT /api/updates/item - Edit milestone
   if (req.method === 'PUT' && url.pathname === '/api/updates/item') {
     let body = '';

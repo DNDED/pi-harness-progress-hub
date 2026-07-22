@@ -240,6 +240,58 @@ export default function App() {
     }
   };
 
+  const [showCreateMilestoneModal, setShowCreateMilestoneModal] = useState<boolean>(false);
+  const [createTitle, setCreateTitle] = useState<string>('');
+  const [createCategory, setCreateCategory] = useState<string>('Core Runtime');
+  const [createDescription, setCreateDescription] = useState<string>('');
+  const [createHighlightsText, setCreateHighlightsText] = useState<string>('');
+
+  const handleCreateMilestone = async () => {
+    if (!createTitle.trim()) return;
+    const highlights = createHighlightsText
+      .split('\n')
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    try {
+      const res = await fetch('/api/updates/item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: createTitle,
+          category: createCategory,
+          description: createDescription,
+          highlights,
+          author: 'dashboard-user',
+          status: 'Verified'
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUpdates(prev => [data.update, ...prev]);
+        playChime();
+      }
+    } catch {
+      const fallback: UpdateItem = {
+        id: `upd-${Date.now().toString(36)}`,
+        timestamp: new Date().toISOString(),
+        relativeTime: 'Just now',
+        title: createTitle,
+        category: createCategory,
+        status: 'Verified',
+        author: 'dashboard-user',
+        description: createDescription,
+        highlights
+      };
+      setUpdates(prev => [fallback, ...prev]);
+    } finally {
+      setShowCreateMilestoneModal(false);
+      setCreateTitle('');
+      setCreateDescription('');
+      setCreateHighlightsText('');
+    }
+  };
+
   const toggleBookmark = (id: string) => {
     setBookmarkedIds(prev => {
       const next = prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id];
@@ -1639,6 +1691,14 @@ export default function App() {
                 <Trash2 className="w-3.5 h-3.5 text-rose-400" />
                 <span>Reset Feed</span>
               </button>
+              <button
+                onClick={() => setShowCreateMilestoneModal(true)}
+                className="px-2.5 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                title="Create a new milestone update manually"
+              >
+                <Plus className="w-3.5 h-3.5 text-cyan-400" />
+                <span>New Milestone</span>
+              </button>
               <div className="relative w-full sm:w-64">
                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
@@ -2153,6 +2213,94 @@ export default function App() {
                 className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold rounded-xl text-xs transition"
               >
                 Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Milestone Modal */}
+      {showCreateMilestoneModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div
+            className="bg-slate-900 border border-cyan-500/40 rounded-3xl w-full max-w-lg shadow-2xl p-6 space-y-4 relative overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Plus className="w-5 h-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-slate-100">
+                  Create New Milestone
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowCreateMilestoneModal(false)}
+                className="p-1 text-slate-400 hover:text-slate-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 font-mono text-xs">
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Title</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Memory Optimization Engine"
+                  value={createTitle}
+                  onChange={(e) => setCreateTitle(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Category</label>
+                <select
+                  value={createCategory}
+                  onChange={(e) => setCreateCategory(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                >
+                  {categories.slice(1).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Description</label>
+                <textarea
+                  rows={3}
+                  placeholder="Describe the milestone update details..."
+                  value={createDescription}
+                  onChange={(e) => setCreateDescription(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 font-semibold mb-1">Highlights (one per line)</label>
+                <textarea
+                  rows={3}
+                  placeholder="Highlight 1&#10;Highlight 2"
+                  value={createHighlightsText}
+                  onChange={(e) => setCreateHighlightsText(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <button
+                onClick={() => setShowCreateMilestoneModal(false)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateMilestone}
+                className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold rounded-xl text-xs transition"
+              >
+                Create Milestone
               </button>
             </div>
           </div>
