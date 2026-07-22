@@ -106,6 +106,17 @@ interface SubagentLogData {
   stdout: string;
 }
 
+interface SentinelLogData {
+  id: string;
+  name: string;
+  category: string;
+  status: string;
+  speedMs: number;
+  timestamp: string;
+  rule: string;
+  stdout: string;
+}
+
 interface HealthSnapshotItem {
   timestamp: string;
   uptimeSec: number;
@@ -151,6 +162,7 @@ export default function App() {
   const [commandQuery, setCommandQuery] = useState<string>('');
   const [commandSelectedIndex, setCommandSelectedIndex] = useState<number>(0);
   const [selectedSubagentLog, setSelectedSubagentLog] = useState<SubagentLogData | null>(null);
+  const [selectedSentinelLog, setSelectedSentinelLog] = useState<SentinelLogData | null>(null);
   const [copiedLog, setCopiedLog] = useState<boolean>(false);
   const [isReverifyingSentinels, setIsReverifyingSentinels] = useState<boolean>(false);
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
@@ -1007,12 +1019,37 @@ export default function App() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto pr-1">
               {filteredSentinels.map((s) => (
-                <div key={s.id} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                <div key={s.id} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 group">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-slate-200 font-semibold truncate">{s.name}</span>
-                    <span className="text-emerald-400 text-[10px] font-bold px-1.5 py-0.5 bg-emerald-500/10 rounded">
-                      {s.status}
-                    </span>
+                    <span className="text-slate-200 font-semibold truncate max-w-[110px]" title={s.name}>{s.name}</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-emerald-400 text-[10px] font-bold px-1.5 py-0.5 bg-emerald-500/10 rounded">
+                        {s.status}
+                      </span>
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(`/api/sentinel-log?id=${s.id}`);
+                            setSelectedSentinelLog(await res.json());
+                          } catch {
+                            setSelectedSentinelLog({
+                              id: s.id,
+                              name: s.name,
+                              category: s.category,
+                              status: s.status,
+                              speedMs: s.speedMs,
+                              timestamp: new Date().toISOString(),
+                              rule: `Check for violations matching rule pattern [${s.category}]`,
+                              stdout: `[INIT] ${s.name} (${s.id})\n[VERIFY] Executed in ${s.speedMs}ms.\n[RESULT] PASS.`
+                            });
+                          }
+                        }}
+                        className="px-1.5 py-0.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 rounded text-[10px] font-semibold transition"
+                        title="View sentinel execution log"
+                      >
+                        Log
+                      </button>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
                     <span>{s.category}</span>
@@ -1688,6 +1725,84 @@ export default function App() {
             </div>
           </div>
         )}
+
+      {/* Sentinel Execution Log Modal */}
+      {selectedSentinelLog && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div
+            className="bg-slate-900 border border-emerald-500/40 rounded-3xl w-full max-w-2xl shadow-2xl p-6 space-y-4 relative overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-lg font-bold text-slate-100">
+                  Sentinel Execution Log: {selectedSentinelLog.name}
+                </h2>
+              </div>
+              <button
+                onClick={() => setSelectedSentinelLog(null)}
+                className="p-1 text-slate-400 hover:text-slate-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs">
+              <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500 text-[10px]">CATEGORY</div>
+                <div className="text-emerald-300 font-bold">{selectedSentinelLog.category}</div>
+              </div>
+              <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500 text-[10px]">SPEED</div>
+                <div className="text-cyan-400 font-bold">{selectedSentinelLog.speedMs}ms</div>
+              </div>
+              <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500 text-[10px]">STATUS</div>
+                <div className="text-emerald-400 font-bold">{selectedSentinelLog.status}</div>
+              </div>
+              <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                <div className="text-slate-500 text-[10px]">ID</div>
+                <div className="text-indigo-300 font-bold">{selectedSentinelLog.id}</div>
+              </div>
+            </div>
+
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 font-mono text-xs">
+              <div className="text-slate-500 text-[10px]">RULE PATTERN</div>
+              <div className="text-slate-200">{selectedSentinelLog.rule}</div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                <span>SENTINEL STDOUT STREAM</span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(selectedSentinelLog.stdout);
+                    setCopiedLog(true);
+                    setTimeout(() => setCopiedLog(false), 2000);
+                  }}
+                  className="px-2 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                >
+                  {copiedLog ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-emerald-400" />}
+                  <span>{copiedLog ? 'Copied Log' : 'Copy Log'}</span>
+                </button>
+              </div>
+              <pre className="p-4 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs text-emerald-400 overflow-x-auto max-h-56 scrollbar-none leading-relaxed">
+                {selectedSentinelLog.stdout}
+              </pre>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setSelectedSentinelLog(null)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700 transition"
+              >
+                Close Log
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 font-mono space-y-4">

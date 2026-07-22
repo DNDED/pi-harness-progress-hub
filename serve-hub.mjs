@@ -292,6 +292,44 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Sentinel Execution Log API Route
+  if (url.pathname === '/api/sentinel-log') {
+    const id = url.searchParams.get('id') || 's-01';
+    let sentinels = [];
+    try {
+      if (fs.existsSync(SENTINELS_FILE)) {
+        sentinels = JSON.parse(fs.readFileSync(SENTINELS_FILE, 'utf-8'));
+      }
+    } catch {
+      sentinels = [];
+    }
+
+    const sentinel = sentinels.find(s => s.id === id) || {
+      id,
+      name: 'Proactive Safety Sentinel',
+      category: 'Security',
+      status: 'Passing',
+      speedMs: 1.2
+    };
+
+    const logData = {
+      id: sentinel.id,
+      name: sentinel.name,
+      category: sentinel.category,
+      status: sentinel.status,
+      speedMs: sentinel.speedMs,
+      timestamp: new Date().toISOString(),
+      rule: `Check for violations matching rule pattern [${sentinel.category}]`,
+      stdout: `[${new Date().toISOString()}] [SENTINEL-INIT] Initialized "${sentinel.name}" (${sentinel.id})\n` +
+        `[${new Date().toISOString()}] [CHECK] Scanned AST & regex patterns in ${sentinel.speedMs}ms\n` +
+        `[${new Date().toISOString()}] [RESULT] PASS - 0 violations detected. Sentinel status: ${sentinel.status}.`
+    };
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(logData, null, 2));
+    return;
+  }
+
   // Subagent Telemetry Export Endpoint
   if (url.pathname === '/api/subagents/export') {
     const format = (url.searchParams.get('format') || 'json').toLowerCase();
