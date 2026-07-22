@@ -147,6 +147,31 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // DELETE /api/subagents REST Route
+  if (req.method === 'DELETE' && url.pathname === '/api/subagents') {
+    try {
+      const defaultSubagents = [
+        {
+          id: 'sub-01',
+          name: 'Gemini 3.6 Flash Worker',
+          task: 'Refactor TUI status bar metrics widget and verify powerhouse unit tests',
+          status: 'Completed',
+          durationMs: 420,
+          tokensUsed: 1250,
+          model: 'gemini-3.6-flash',
+          createdAt: new Date().toISOString()
+        }
+      ];
+      fs.writeFileSync(SUBAGENTS_FILE, JSON.stringify(defaultSubagents, null, 2), 'utf-8');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, message: 'Subagent execution history reset', subagents: defaultSubagents }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
   // Status Badge SVG Route
   if (url.pathname === '/api/status/badge') {
     const uptime = Math.floor((Date.now() - START_TIME) / 1000);

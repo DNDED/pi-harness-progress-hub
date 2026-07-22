@@ -41,7 +41,8 @@ import {
   LayoutGrid,
   Timer,
   Command,
-  Star
+  Star,
+  Trash2
 } from 'lucide-react';
 import initialUpdates from './data/updates.json';
 import initialSubagents from './data/subagents.json';
@@ -319,6 +320,18 @@ export default function App() {
     } finally {
       setShowDispatchModal(false);
       playChime();
+    }
+  };
+
+  const handleClearSubagents = async () => {
+    try {
+      const res = await fetch('/api/subagents', { method: 'DELETE' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.subagents) setSubagents(data.subagents);
+      }
+    } catch {
+      setSubagents([]);
     }
   };
 
@@ -1168,6 +1181,14 @@ export default function App() {
                   <Download className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Export CSV</span>
                 </a>
+                <button
+                  onClick={handleClearSubagents}
+                  className="px-2.5 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                  title="Reset subagent execution history to default baseline"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Reset History</span>
+                </button>
                 {['All', 'Completed', 'Running'].map((st) => (
                   <button
                     key={st}

@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvso05f",
+    "timestamp": "2026-07-22T08:02:13.827Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Reset REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented DELETE /api/subagents REST route and Reset History button in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent History Reset REST API & UI",
+      "DELETE /api/subagents REST route",
+      "Enables resetting subagent execution telemetry to baseline sample records with 1 click"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvso05f",
+    "timestamp": "2026-07-22T08:02:13.827Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Telemetry Reset REST API & UI Action",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented DELETE /api/subagents REST route and Reset History button in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent History Reset REST API & UI",
+      "DELETE /api/subagents REST route",
+      "Enables resetting subagent execution telemetry to baseline sample records with 1 click"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvsm115",
     "timestamp": "2026-07-22T08:00:41.657Z",
     "relativeTime": "Just now",
