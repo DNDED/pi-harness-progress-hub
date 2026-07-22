@@ -1681,8 +1681,34 @@ export default function App() {
         )}
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 font-mono">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500 font-mono space-y-4">
+        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-center gap-2 text-[11px]">
+          <span className="text-slate-600 font-semibold mr-1">Hotkeys:</span>
+          {[
+            { key: '?', label: 'Legend', run: () => setShowHotkeyModal(true) },
+            { key: 'Ctrl+K', label: 'Palette', run: () => setShowCommandPalette(true) },
+            { key: 'R', label: 'Refresh', run: handleRefresh },
+            { key: 'H', label: 'Health', run: () => setShowHealth(prev => !prev) },
+            { key: 'S', label: 'Sentinels', run: () => setShowSentinels(prev => !prev) },
+            { key: 'B', label: 'Subagents', run: () => setShowSubagents(prev => !prev) },
+            { key: 'M', label: audioEnabled ? 'Mute' : 'Chime', run: () => setAudioEnabled(prev => !prev) },
+            { key: 'T', label: 'Theme', run: () => setActiveTheme(t => t === 'slate' ? 'cyber' : t === 'cyber' ? 'obsidian' : 'slate') },
+            { key: 'P', label: autoPolling ? 'Pause' : 'Poll', run: () => setAutoPolling(prev => !prev) },
+            { key: 'C', label: compactTimeline ? 'Expanded' : 'Compact', run: () => setCompactTimeline(prev => !prev) },
+          ].map((hk) => (
+            <button
+              key={hk.key}
+              onClick={hk.run}
+              className="px-2 py-0.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-400 hover:text-cyan-300 rounded-md transition flex items-center gap-1 cursor-pointer"
+              title={`Hotkey ${hk.key}: ${hk.label}`}
+            >
+              <span className="text-cyan-400 font-bold bg-cyan-500/10 px-1 py-0.2 rounded text-[10px]">{hk.key}</span>
+              <span>{hk.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-900">
           <div className="flex items-center gap-2">
             <GitBranch className="w-4 h-4 text-cyan-500" />
             <span>Pi Agent Harness Continuous Self-Improvement System</span>
