@@ -422,6 +422,21 @@ export default function App() {
 
   const maxSubagentDuration = Math.max(1, ...subagents.map(s => s.durationMs));
 
+  const subagentModelStats = subagents.reduce((acc, s) => {
+    const m = s.model || 'Unknown';
+    if (!acc[m]) {
+      acc[m] = { model: m, tasks: 0, duration: 0, tokens: 0 };
+    }
+    acc[m].tasks += 1;
+    acc[m].duration += s.durationMs || 0;
+    acc[m].tokens += s.tokensUsed || 0;
+    return acc;
+  }, {} as Record<string, { model: string; tasks: number; duration: number; tokens: number }>);
+
+  const modelLeaderboard = Object.values(subagentModelStats)
+    .map(m => ({ ...m, avgDuration: Math.round(m.duration / m.tasks) }))
+    .sort((a, b) => b.tasks - a.tasks);
+
   const totalVideoFrames = 90 + Math.max(1, updates.length) * 150;
 
   const getThemeBg = () => {
@@ -1011,6 +1026,38 @@ export default function App() {
                 ))}
               </div>
             </div>
+
+            {/* Subagent Model Leaderboard */}
+            {modelLeaderboard.length > 0 && (
+              <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span className="flex items-center gap-1.5 font-bold text-slate-200">
+                    <Award className="w-4 h-4 text-amber-400" /> Subagent Model Leaderboard & Performance Stats
+                  </span>
+                  <span className="text-amber-400 font-bold">{modelLeaderboard.length} Active Models</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                  {modelLeaderboard.map((m, idx) => (
+                    <div key={m.model} className="p-3 bg-slate-900/60 rounded-xl border border-slate-800 space-y-1.5 font-mono text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-cyan-300 font-bold truncate max-w-[130px]" title={m.model}>{m.model}</span>
+                        <span className="px-1.5 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-bold text-[10px]">
+                          #{idx + 1}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-slate-400 text-[11px] pt-1 border-t border-slate-800">
+                        <span>Tasks: <strong className="text-slate-200">{m.tasks}</strong></span>
+                        <span>Avg: <strong className="text-emerald-400">{m.avgDuration}ms</strong></span>
+                      </div>
+                      <div className="text-[10px] text-slate-500">
+                        Total Tokens: <span className="text-indigo-300 font-semibold">{m.tokens}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Execution Duration Visualizer */}
             {subagents.length > 0 && (

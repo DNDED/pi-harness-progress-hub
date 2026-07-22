@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvs3bp0",
+    "timestamp": "2026-07-22T07:46:09.012Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Model Leaderboard & /api/subagents/stats REST Endpoint",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/subagents/stats REST endpoint in serve-hub.mjs and an interactive Subagent Model Leaderboard Card in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Model Leaderboard & Analytics",
+      "C:/Program Files/Git/api/subagents/stats REST endpoint",
+      "Aggregated tasks, average execution duration, total tokens, and rank per AI model"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvs3bp0",
+    "timestamp": "2026-07-22T07:46:09.012Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Model Leaderboard & /api/subagents/stats REST Endpoint",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/subagents/stats REST endpoint in serve-hub.mjs and an interactive Subagent Model Leaderboard Card in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Model Leaderboard & Analytics",
+      "C:/Program Files/Git/api/subagents/stats REST endpoint",
+      "Aggregated tasks, average execution duration, total tokens, and rank per AI model"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvs1gpr",
     "timestamp": "2026-07-22T07:44:42.207Z",
     "relativeTime": "Just now",

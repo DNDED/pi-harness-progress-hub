@@ -70,6 +70,47 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Subagent Model Stats API Endpoint
+  if (url.pathname === '/api/subagents/stats') {
+    let subagents = [];
+    try {
+      if (fs.existsSync(SUBAGENTS_FILE)) {
+        subagents = JSON.parse(fs.readFileSync(SUBAGENTS_FILE, 'utf-8'));
+      }
+    } catch {
+      subagents = [];
+    }
+
+    const modelStats = {};
+    for (const item of subagents) {
+      const model = item.model || 'Unknown Model';
+      if (!modelStats[model]) {
+        modelStats[model] = {
+          model,
+          totalTasks: 0,
+          completedTasks: 0,
+          totalDurationMs: 0,
+          totalTokens: 0,
+          avgDurationMs: 0
+        };
+      }
+      modelStats[model].totalTasks += 1;
+      if (item.status === 'Completed') modelStats[model].completedTasks += 1;
+      modelStats[model].totalDurationMs += item.durationMs || 0;
+      modelStats[model].totalTokens += item.tokensUsed || 0;
+    }
+
+    const result = Object.values(modelStats).map(m => ({
+      ...m,
+      avgDurationMs: m.totalTasks > 0 ? Math.round(m.totalDurationMs / m.totalTasks) : 0,
+      successRate: m.totalTasks > 0 ? `${Math.round((m.completedTasks / m.totalTasks) * 100)}%` : '0%'
+    }));
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result, null, 2));
+    return;
+  }
+
   // System Health JSON Endpoint
   if (url.pathname === '/api/health/json') {
     let updatesCount = 0;
