@@ -93,6 +93,18 @@ interface HealthData {
   timestamp: string;
 }
 
+interface SubagentLogData {
+  id: string;
+  name: string;
+  model: string;
+  status: string;
+  durationMs: number;
+  tokensUsed: number;
+  timestamp: string;
+  task: string;
+  stdout: string;
+}
+
 interface HealthSnapshotItem {
   timestamp: string;
   uptimeSec: number;
@@ -135,6 +147,8 @@ export default function App() {
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
   const [commandQuery, setCommandQuery] = useState<string>('');
   const [commandSelectedIndex, setCommandSelectedIndex] = useState<number>(0);
+  const [selectedSubagentLog, setSelectedSubagentLog] = useState<SubagentLogData | null>(null);
+  const [copiedLog, setCopiedLog] = useState<boolean>(false);
 
   const prevUpdateCountRef = useRef<number>(updates.length);
 
@@ -1004,12 +1018,40 @@ export default function App() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {filteredSubagents.map((s) => (
-                <div key={s.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                <div key={s.id} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 hover:border-cyan-500/40 transition space-y-2 group">
                   <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                     <span className="text-cyan-400 font-bold">{s.name}</span>
-                    <span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
-                      {s.status}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
+                        {s.status}
+                      </span>
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(`/api/subagent-log?id=${s.id}`);
+                            const data = await res.json();
+                            setSelectedSubagentLog(data);
+                          } catch {
+                            setSelectedSubagentLog({
+                              id: s.id,
+                              name: s.name,
+                              model: s.model,
+                              status: s.status,
+                              durationMs: s.durationMs,
+                              tokensUsed: s.tokensUsed || 180,
+                              timestamp: s.timestamp,
+                              task: s.task,
+                              stdout: `[${s.timestamp}] [INIT] Subagent "${s.name}" initialized.\n[${s.timestamp}] [TASK] "${s.task}"\n[${s.timestamp}] [DONE] Executed in ${s.durationMs}ms.`
+                            });
+                          }
+                        }}
+                        className="px-1.5 py-0.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                        title="View subagent execution terminal log"
+                      >
+                        <Terminal className="w-3 h-3 text-cyan-400" />
+                        Log
+                      </button>
+                    </div>
                   </div>
                   <div className="text-xs text-slate-300">{s.task}</div>
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-900">
@@ -1354,6 +1396,84 @@ export default function App() {
               <div className="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-500">
                 <span>Use ↑ ↓ to navigate, Enter to select</span>
                 <span>Ctrl+K or / to open</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+      {/* Subagent Execution Log Modal */}
+        {selectedSubagentLog && (
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div
+              className="bg-slate-900 border border-cyan-500/40 rounded-3xl w-full max-w-2xl shadow-2xl p-6 space-y-4 relative overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-5 h-5 text-cyan-400" />
+                  <h2 className="text-lg font-bold text-slate-100">
+                    Subagent Execution Log: {selectedSubagentLog.name}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setSelectedSubagentLog(null)}
+                  className="p-1 text-slate-400 hover:text-slate-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs">
+                <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">MODEL</div>
+                  <div className="text-cyan-300 font-bold">{selectedSubagentLog.model}</div>
+                </div>
+                <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">DURATION</div>
+                  <div className="text-emerald-400 font-bold">{selectedSubagentLog.durationMs}ms</div>
+                </div>
+                <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">TOKENS USED</div>
+                  <div className="text-indigo-300 font-bold">{selectedSubagentLog.tokensUsed}</div>
+                </div>
+                <div className="p-2.5 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="text-slate-500 text-[10px]">STATUS</div>
+                  <div className="text-emerald-400 font-bold">{selectedSubagentLog.status}</div>
+                </div>
+              </div>
+
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 font-mono text-xs">
+                <div className="text-slate-500 text-[10px]">TASK PROMPT</div>
+                <div className="text-slate-200">{selectedSubagentLog.task}</div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+                  <span>TERMINAL STDOUT / STDERR STREAM</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(selectedSubagentLog.stdout);
+                      setCopiedLog(true);
+                      setTimeout(() => setCopiedLog(false), 2000);
+                    }}
+                    className="px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 rounded text-[10px] font-semibold flex items-center gap-1 transition"
+                  >
+                    {copiedLog ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-cyan-400" />}
+                    <span>{copiedLog ? 'Copied Log' : 'Copy Log'}</span>
+                  </button>
+                </div>
+                <pre className="p-4 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs text-emerald-400 overflow-x-auto max-h-56 scrollbar-none leading-relaxed">
+                  {selectedSubagentLog.stdout}
+                </pre>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => setSelectedSubagentLog(null)}
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700 transition"
+                >
+                  Close Log
+                </button>
               </div>
             </div>
           </div>

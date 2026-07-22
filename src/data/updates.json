@@ -1,5 +1,41 @@
 [
   {
+    "id": "upd-mrvrzrbn",
+    "timestamp": "2026-07-22T07:43:22.643Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Log REST API & Terminal Log Viewer Modal",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/subagent-log REST endpoint in serve-hub.mjs and an interactive Subagent Execution Terminal Log Modal in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Log REST API & Terminal Viewer Modal",
+      "C:/Program Files/Git/api/subagent-log REST route & modal",
+      "Terminal stdout stream, task prompt, metrics & one-click copy"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
+    "id": "upd-mrvrzrbn",
+    "timestamp": "2026-07-22T07:43:22.643Z",
+    "relativeTime": "Just now",
+    "title": "Subagent Log REST API & Terminal Log Viewer Modal",
+    "category": "Subagents",
+    "status": "Verified",
+    "author": "pi-agent (powerhouse)",
+    "description": "Implemented /api/subagent-log REST endpoint in serve-hub.mjs and an interactive Subagent Execution Terminal Log Modal in pi-progress-hub App.tsx.",
+    "highlights": [
+      "Subagent Log REST API & Terminal Viewer Modal",
+      "C:/Program Files/Git/api/subagent-log REST route & modal",
+      "Terminal stdout stream, task prompt, metrics & one-click copy"
+    ],
+    "metrics": {
+      "status": "Verified"
+    }
+  },
+  {
     "id": "upd-mrvrxcds",
     "timestamp": "2026-07-22T07:41:29.968Z",
     "relativeTime": "Just now",
